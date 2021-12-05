@@ -10,8 +10,12 @@ namespace JitEvolution.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "JitEvolution");
+
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -42,18 +46,21 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUsers_AspNetUsers_ChangedById",
                         column: x => x.ChangedById,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -61,6 +68,7 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -80,18 +88,21 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoles_AspNetUsers_ChangedById",
                         column: x => x.ChangedById,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetRoles_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetRoles_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -99,6 +110,7 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -113,6 +125,7 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -120,6 +133,7 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
@@ -133,6 +147,7 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -140,6 +155,7 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -153,6 +169,7 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -160,6 +177,7 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -174,6 +192,7 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -181,6 +200,7 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
+                schema: "JitEvolution",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -192,12 +212,14 @@ namespace JitEvolution.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "JitEvolution",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -205,67 +227,80 @@ namespace JitEvolution.Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
+                schema: "JitEvolution",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoles_ChangedById",
+                schema: "JitEvolution",
                 table: "AspNetRoles",
                 column: "ChangedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoles_CreatedById",
+                schema: "JitEvolution",
                 table: "AspNetRoles",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoles_DeletedById",
+                schema: "JitEvolution",
                 table: "AspNetRoles",
                 column: "DeletedById");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
+                schema: "JitEvolution",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
+                schema: "JitEvolution",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
+                schema: "JitEvolution",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
+                schema: "JitEvolution",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
+                schema: "JitEvolution",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_ChangedById",
+                schema: "JitEvolution",
                 table: "AspNetUsers",
                 column: "ChangedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CreatedById",
+                schema: "JitEvolution",
                 table: "AspNetUsers",
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_DeletedById",
+                schema: "JitEvolution",
                 table: "AspNetUsers",
                 column: "DeletedById");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
+                schema: "JitEvolution",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
@@ -274,25 +309,32 @@ namespace JitEvolution.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                name: "AspNetRoleClaims",
+                schema: "JitEvolution");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                name: "AspNetUserClaims",
+                schema: "JitEvolution");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                name: "AspNetUserLogins",
+                schema: "JitEvolution");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                name: "AspNetUserRoles",
+                schema: "JitEvolution");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                name: "AspNetUserTokens",
+                schema: "JitEvolution");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "AspNetRoles",
+                schema: "JitEvolution");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "AspNetUsers",
+                schema: "JitEvolution");
         }
     }
 }

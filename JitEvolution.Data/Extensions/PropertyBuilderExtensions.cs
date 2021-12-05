@@ -5,6 +5,6 @@ namespace JitEvolution.Data.Extensions
     internal class PropertyBuilderExtensions
     {
         public static ValueConverter<DateTime, DateTime> UtcKindConversion =>
-            new(x => x, x => DateTime.SpecifyKind(x, DateTimeKind.Utc));
+            new(x => DateTime.SpecifyKind(x, DateTimeKind.Utc), x => DateTime.SpecifyKind(x, DateTimeKind.Utc));
     }
 }

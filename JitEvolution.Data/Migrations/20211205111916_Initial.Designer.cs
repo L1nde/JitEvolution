@@ -12,13 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JitEvolution.Data.Migrations
 {
     [DbContext(typeof(JitEvolutionDbContext))]
-    [Migration("20211205102943_Initial")]
+    [Migration("20211205111916_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("JitEvolution")
                 .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -73,7 +74,7 @@ namespace JitEvolution.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "JitEvolution");
                 });
 
             modelBuilder.Entity("JitEvolution.Core.Models.Identity.User", b =>
@@ -163,7 +164,7 @@ namespace JitEvolution.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers", "JitEvolution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -187,7 +188,7 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "JitEvolution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -211,7 +212,7 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "JitEvolution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -232,7 +233,7 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "JitEvolution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -247,7 +248,7 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "JitEvolution");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -266,7 +267,7 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "JitEvolution");
                 });
 
             modelBuilder.Entity("JitEvolution.Core.Models.Identity.Role", b =>

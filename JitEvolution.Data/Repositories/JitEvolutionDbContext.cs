@@ -1,6 +1,7 @@
 ﻿using JitEvolution.BusinessObjects.Identity;
 using JitEvolution.Core.Models;
 using JitEvolution.Core.Models.Identity;
+using JitEvolution.Data.DataSeeders.Identity;
 using JitEvolution.Data.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ namespace JitEvolution.Core.Repositories
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.HasDefaultSchema("JitEvolution");
+
             builder.ApplyConfigurationsFromAssembly(typeof(JitEvolutionDbContext).Assembly);
 
             base.OnModelCreating(builder);
@@ -29,6 +32,8 @@ namespace JitEvolution.Core.Repositories
                     entityType.SetSoftDeleteFilter();
                 }
             }
+
+            UserDataSeeder.Add(builder);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

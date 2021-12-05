@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JitEvolution.Core.Models.Identity
 {
@@ -16,10 +17,13 @@ namespace JitEvolution.Core.Models.Identity
 
         public Guid? DeletedById { get; set; }
 
+        [NotMapped]
         public virtual User CreatedBy { get; set; }
 
+        [NotMapped]
         public virtual User ChangedBy { get; set; }
 
+        [NotMapped]
         public virtual User DeletedBy { get; set; }
     }
 }

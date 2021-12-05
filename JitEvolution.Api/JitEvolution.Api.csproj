@@ -8,17 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JitEvolution.Api.Dtos\JitEvolution.Api.Dtos.csproj" />
     <ProjectReference Include="..\JitEvolution.BusinessObjects\JitEvolution.BusinessObjects.csproj" />
+    <ProjectReference Include="..\JitEvolution.Config\JitEvolution.Config.csproj" />
     <ProjectReference Include="..\JitEvolution.Core\JitEvolution.Core.csproj" />
     <ProjectReference Include="..\JitEvolution.Data\JitEvolution.Data.csproj" />
+    <ProjectReference Include="..\JitEvolution.Exceptions\JitEvolution.Exceptions.csproj" />
     <ProjectReference Include="..\JitEvolution.Services\JitEvolution.Services.csproj" />
   </ItemGroup>
 
