@@ -5,6 +5,8 @@ namespace JitEvolution.Core.Models.Identity
 {
     public class User : IdentityUser<Guid>, IBaseEntity
     {
+        public string? AccessKey { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public Guid CreatedById { get; set; }

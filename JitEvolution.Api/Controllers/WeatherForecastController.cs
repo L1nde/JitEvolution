@@ -1,7 +1,10 @@
+using JitEvolution.Services.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JitEvolution.Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = ApiKeyAuthenticationSchemeOptions.DefaultScheme)]
     public class WeatherForecastController : BaseController
     {
         private static readonly string[] Summaries = new[]

@@ -1,4 +1,4 @@
-﻿namespace JitEvolution.Api.Dtos
+﻿namespace JitEvolution.BusinessObjects
 {
     public class ErrorResponseDto
     {

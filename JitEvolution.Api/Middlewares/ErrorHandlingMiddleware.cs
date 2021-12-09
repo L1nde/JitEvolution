@@ -1,6 +1,5 @@
-﻿using JitEvolution.Api.Dtos;
-using JitEvolution.Exceptions;
-using Newtonsoft.Json;
+﻿using JitEvolution.Exceptions;
+using JitEvolution.Services.Errors;
 
 namespace JitEvolution.Api.Middlewares
 {
@@ -21,32 +20,12 @@ namespace JitEvolution.Api.Middlewares
             }
             catch (BaseException ex)
             {
-                await GenerateExceptionResponse(context, ex.Message, ex.GetType().Name, ex.HttpStatusCode);
+                await ErrorResponseWriter.GenerateExceptionResponse(context, ex);
             }
             catch (Exception ex)
             {
-                await GenerateExceptionResponse(context, ex.Message, ex.GetType().Name, 500);
+                await ErrorResponseWriter.GenerateExceptionResponse(context, ex.Message, ex.GetType().Name, 500);
             }
-        }
-
-        private static Task GenerateExceptionResponse(HttpContext context, string message, string exceptionType, int statusCode)
-        {
-            var errorDto = new ErrorResponseDto
-            {
-                Errors = new Dictionary<string, string>()
-                {
-                    {"ExceptionType", exceptionType}
-                },
-                Title = message,
-                Status = statusCode
-            };
-
-            var result = JsonConvert.SerializeObject(errorDto);
-
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = statusCode;
-
-            return context.Response.WriteAsync(result);
         }
     }
 }

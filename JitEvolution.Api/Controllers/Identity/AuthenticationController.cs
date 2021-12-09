@@ -1,5 +1,5 @@
 ﻿using JitEvolution.Api.Dtos.Identity;
-using JitEvolution.Core.Services;
+using JitEvolution.Core.Services.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

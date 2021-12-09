@@ -6,7 +6,7 @@ using JitEvolution.Data.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace JitEvolution.Core.Repositories
+namespace JitEvolution.Data.Repositories
 {
     internal class JitEvolutionDbContext : IdentityDbContext<User, Role, Guid>
     {

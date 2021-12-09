@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JitEvolution.Data.Migrations
 {
     [DbContext(typeof(JitEvolutionDbContext))]
-    [Migration("20211205122414_SuperUserDataSeed")]
-    partial class SuperUserDataSeed
+    [Migration("20211205220937_UserAccessKey")]
+    partial class UserAccessKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,6 +85,9 @@ namespace JitEvolution.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<string>("AccessKey")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ChangedAt")
                         .HasColumnType("timestamp with time zone");

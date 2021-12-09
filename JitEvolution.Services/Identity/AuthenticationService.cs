@@ -1,12 +1,13 @@
 ﻿using JitEvolution.Config;
 using JitEvolution.Core.Models.Identity;
-using JitEvolution.Core.Services;
+using JitEvolution.Core.Services.Identity;
 using JitEvolution.Exceptions.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace JitEvolution.Services.Identity
@@ -71,6 +72,15 @@ namespace JitEvolution.Services.Identity
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateAccessKey(User user)
+        {
+            var accessKey = new byte[16];
+            using (var generator = RandomNumberGenerator.Create())
+                generator.GetBytes(accessKey);
+
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserName}:").Concat(accessKey.AsEnumerable()).ToArray());
         }
     }
 }

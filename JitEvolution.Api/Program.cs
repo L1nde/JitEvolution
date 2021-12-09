@@ -3,6 +3,7 @@ using JitEvolution.BusinessObjects;
 using JitEvolution.Config;
 using JitEvolution.Data;
 using JitEvolution.Services;
+using JitEvolution.Services.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -36,7 +37,7 @@ builder.Services.AddAuthentication(options =>
         RequireExpirationTime = true,
         ValidateLifetime = true
     };
-});
+}).AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationSchemeOptions.DefaultScheme, opt => { });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
