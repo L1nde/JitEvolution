@@ -74,13 +74,13 @@ namespace JitEvolution.Services.Identity
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string GenerateAccessKey(User user)
+        public string GenerateAccessKey(string username)
         {
             var accessKey = new byte[16];
             using (var generator = RandomNumberGenerator.Create())
                 generator.GetBytes(accessKey);
 
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserName}:").Concat(accessKey.AsEnumerable()).ToArray());
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:").Concat(accessKey.AsEnumerable()).ToArray());
         }
     }
 }

@@ -1,23 +1,35 @@
 ﻿using JitEvolution.Core.Models.Identity;
-using JitEvolution.Core.Repositories.Identity;
 using JitEvolution.Core.Services.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace JitEvolution.Services.Identity
 {
     internal class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(UserManager<User> userManager, IAuthenticationService authenticationService)
         {
-            _userRepository = userRepository;
+            _authenticationService = authenticationService;
+            _userManager = userManager;
+            _authenticationService = authenticationService;
         }
 
-        public async Task<User> CreateAsync(User user)
+        public async Task<User> CreateAsync(string username, string password, string email)
         {
-            await _userRepository.AddAsync(user);
+            var user = new User
+            {
+                UserName = username,
+                Email = email,
+                AccessKey = _authenticationService.GenerateAccessKey(username)
+            };
 
-            await _userRepository.SaveChangesAsync();
+            var result = await _userManager.CreateAsync(user, password);
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join("; ", result.Errors.Select(x => x.Description)));
+            }
 
             return user;
         }

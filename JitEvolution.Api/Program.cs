@@ -2,8 +2,10 @@ using JitEvolution.Api.Middlewares;
 using JitEvolution.BusinessObjects;
 using JitEvolution.Config;
 using JitEvolution.Data;
+using JitEvolution.Neo4J.Data;
 using JitEvolution.Services;
 using JitEvolution.Services.Identity;
+using JitEvolution.SignalR.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -16,6 +18,7 @@ builder.Services.RegisterDatabases(builder.Configuration);
 builder.Services.RegisterIdentity();
 builder.Services.RegisterBusinessObjects();
 builder.Services.RegisterServices();
+builder.Services.RegisterNeo4JServices();
 
 builder.Services.AddOptions();
 builder.Services.Configure<Configuration>(builder.Configuration.GetSection("JitEvolution"));
@@ -37,12 +40,30 @@ builder.Services.AddAuthentication(options =>
         RequireExpirationTime = true,
         ValidateLifetime = true
     };
+
+    cfg.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var pathString = context.HttpContext.Request.Path.ToString();
+
+            if (!string.IsNullOrEmpty(accessToken) &&
+                (pathString.StartsWith("/hub/") || pathString.StartsWith("/swagger/")))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 }).AddScheme<ApiKeyAuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(ApiKeyAuthenticationSchemeOptions.DefaultScheme, opt => { });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -53,15 +74,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("Development");
+
 app.UseHttpsRedirection();
 
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<CorsMiddleware>();
 app.UseMiddleware<CurrentUserMiddleWare>();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<JitEvolutionHub>("/hub");
+});
 
 app.Run();

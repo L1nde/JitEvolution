@@ -1,4 +1,5 @@
 ﻿using JitEvolution.Core.Models.Identity;
+using JitEvolution.Core.Repositories.Analyzer;
 using JitEvolution.Core.Repositories.Identity;
 using JitEvolution.Data.Repositories;
 using JitEvolution.Data.Repositories.Identity;

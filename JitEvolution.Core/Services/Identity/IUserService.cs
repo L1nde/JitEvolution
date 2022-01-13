@@ -4,6 +4,6 @@ namespace JitEvolution.Core.Services.Identity
 {
     public interface IUserService
     {
-        Task<User> CreateAsync(User user);
+        Task<User> CreateAsync(string username, string password, string email);
     }
 }

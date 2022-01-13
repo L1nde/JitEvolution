@@ -23,6 +23,21 @@ namespace JitEvolution.Data.DataSeeders.Identity
                     CreatedById = UserConstants.SuperUserId,
                     ChangedAt = new DateTime(2021, 12, 5),
                     ChangedById = UserConstants.SuperUserId,
+                },
+                new User
+                {
+                    Id = UserConstants.AnonymousUserId,
+                    Email = "anonymous@linde.ee",
+                    UserName = "anonymous",
+                    NormalizedUserName = "ANONYMOUS",
+                    NormalizedEmail = "ANONYMOUS@LINDE.EE",
+                    PasswordHash = "AQAAAAEAACcQAAAAEHsMGzjMkGokHqRjfxWTubUykxdrCkvbl0dt148ZjbUpQjyMiCseYeXZNPoDHj5SEw==",
+                    SecurityStamp = "1695ade6-3492-46d4-8da7-e5e6bee0164b",
+                    ConcurrencyStamp = "cb7b908b-e256-4433-b90d-f77cb32818e3",
+                    CreatedAt = new DateTime(2021, 12, 13),
+                    CreatedById = UserConstants.SuperUserId,
+                    ChangedAt = new DateTime(2021, 12, 13),
+                    ChangedById = UserConstants.SuperUserId,
                 });
         }
     }

@@ -6,6 +6,6 @@ namespace JitEvolution.Core.Services.Identity
     {
         Task<(User User, string Token)> LoginWithPasswordAsync(string username, string password);
 
-        string GenerateAccessKey(User user);
+        string GenerateAccessKey(string username);
     }
 }
