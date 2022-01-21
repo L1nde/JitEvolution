@@ -4,28 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JitEvolution.Data.Repositories.Identity
 {
-    internal class UserRepository : IUserRepository
+    internal class UserRepository : BaseCrudRepository<User>, IUserRepository
     {
-        private readonly JitEvolutionDbContext _dbContext;
-
-        public UserRepository(JitEvolutionDbContext dbContext)
+        public UserRepository(JitEvolutionDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public Task<User?> GetByApiKeyAsync(string accessKey) =>
-            _dbContext.Set<User>().AsQueryable().SingleOrDefaultAsync(x => x.AccessKey == accessKey);
-
-        public async Task<User> AddAsync(User user)
-        {
-            await _dbContext.AddAsync(user);
-
-            return user;
-        }
-
-        public Task SaveChangesAsync()
-        {
-            return _dbContext.SaveChangesAsync();
-        }
+            Queryable.SingleOrDefaultAsync(x => x.AccessKey == accessKey);
     }
 }

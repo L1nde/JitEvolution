@@ -45,7 +45,8 @@ namespace JitEvolution.Services.Identity
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName)
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 };
 
                 //claims.AddRange(existingApiKey.Roles.Select(role => new Claim(ClaimTypes.Role, role)));

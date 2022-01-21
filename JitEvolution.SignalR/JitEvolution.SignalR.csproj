@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\JitEvolution.BusinessObjects\JitEvolution.BusinessObjects.csproj" />
+    <ProjectReference Include="..\JitEvolution.Notifications\JitEvolution.Notifications.csproj" />
   </ItemGroup>
 
 </Project>

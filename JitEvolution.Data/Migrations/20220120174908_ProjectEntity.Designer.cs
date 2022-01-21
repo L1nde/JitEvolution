@@ -3,6 +3,7 @@ using System;
 using JitEvolution.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JitEvolution.Data.Migrations
 {
     [DbContext(typeof(JitEvolutionDbContext))]
-    partial class JitEvolutionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220120174908_ProjectEntity")]
+    partial class ProjectEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +47,7 @@ namespace JitEvolution.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("DeletedById")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("ProjectId")
@@ -93,6 +96,7 @@ namespace JitEvolution.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("DeletedById")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -371,7 +375,9 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasOne("JitEvolution.Core.Models.Identity.User", "DeletedBy")
                         .WithMany()
-                        .HasForeignKey("DeletedById");
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("JitEvolution.Core.Models.Identity.User", "User")
                         .WithMany()
@@ -404,7 +410,9 @@ namespace JitEvolution.Data.Migrations
 
                     b.HasOne("JitEvolution.Core.Models.Identity.User", "DeletedBy")
                         .WithMany()
-                        .HasForeignKey("DeletedById");
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ChangedBy");
 

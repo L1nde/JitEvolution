@@ -3,6 +3,7 @@ using System;
 using JitEvolution.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JitEvolution.Data.Migrations
 {
     [DbContext(typeof(JitEvolutionDbContext))]
-    partial class JitEvolutionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220120184634_NullableFix")]
+    partial class NullableFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

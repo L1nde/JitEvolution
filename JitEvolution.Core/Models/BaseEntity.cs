@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using JitEvolution.Core.Models.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JitEvolution.Core.Models.Identity
+namespace JitEvolution.Core.Models
 {
-    public class User : IdentityUser<Guid>, IBaseEntity
+    public abstract class BaseEntity : IBaseEntity
     {
-        public string? AccessKey { get; set; }
-        
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
 

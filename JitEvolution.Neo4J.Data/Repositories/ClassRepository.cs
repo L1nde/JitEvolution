@@ -10,7 +10,7 @@ namespace JitEvolution.Neo4J.Data.Repositories
         {
         }
 
-        public async Task<IEnumerable<Result<Class>>> GetAll(long appId, string? filter = null)
+        public async Task<IEnumerable<Result<Class>>> GetAllAsync(long appId, string? filter = null)
         {
             var query = (await ClientAsync()).Cypher
                 .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)")

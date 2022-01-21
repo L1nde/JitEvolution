@@ -20,22 +20,22 @@ namespace JitEvolution.Api.Controllers.Analyzer
             _variableRepository = variableRepository;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<AppDto>> GetAll()
-        {
-            return (await _appRepository.GetAll()).Select(x => new AppDto
-            {
-                Id = x.Id,
-                AppKey = x.Data.AppKey,
-                Name = x.Data.Name,
-                VersionNumber = x.Data.VersionNumber
-            });
-        }
+        //[HttpGet]
+        //public async Task<IEnumerable<AppDto>> GetAll()
+        //{
+        //    return (await _appRepository.GetAll()).Select(x => new AppDto
+        //    {
+        //        Id = x.Id,
+        //        AppKey = x.Data.AppKey,
+        //        Name = x.Data.Name,
+        //        VersionNumber = x.Data.VersionNumber
+        //    });
+        //}
 
-        [HttpGet("{appId}")]
-        public async Task<AppDetailDto> Get(long appId)
+        [HttpGet()]
+        public async Task<AppDetailDto> Get(string projectId)
         {
-            var result = await _appRepository.Get(appId);
+            var result = await _appRepository.GetAsync(projectId);
 
             return new AppDetailDto
             {
@@ -43,7 +43,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
                 AppKey = result.Data.AppKey,
                 Name = result.Data.Name,
                 VersionNumber = result.Data.VersionNumber,
-                Classes = await Task.WhenAll((await _classRepository.GetAll(appId)).Select(async x => new ClassDetailDto
+                Classes = await Task.WhenAll((await _classRepository.GetAllAsync(result.Id)).Select(async x => new ClassDetailDto
                 {
                     Id = x.Id,
                     Code = x.Data.Code,
@@ -54,7 +54,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
                     Path = x.Data.Path,
                     Usr = x.Data.Usr,
                     VersionNUmber = x.Data.VersionNumber,
-                    Methods = (await _methodRepository.GetAll(appId, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new MethodDetailDto
+                    Methods = (await _methodRepository.GetAllAsync(result.Id, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new MethodDetailDto
                     {
                         Id = y.Id,
                         Code = y.Data.Code,
@@ -75,13 +75,13 @@ namespace JitEvolution.Api.Controllers.Analyzer
                         Usr = y.Data.Usr,
                         VersionNumber = y.Data.VersionNumber,
                     }),
-                    MethodsCalls = (await _methodRepository.GetAllRelationships(appId, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new Core.Models.Analyzer.RelationshipDto
+                    MethodsCalls = (await _methodRepository.GetAllRelationshipsAsync(result.Id, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new Core.Models.Analyzer.RelationshipDto
                     {
                         Type = y.Data.Type,
                         Start = y.Data.Start,
                         End = y.Data.End
                     }),
-                    Variables = (await _variableRepository.GetAll(appId, x.Id)).Select(y => new VariableDetailDto
+                    Variables = (await _variableRepository.GetAllAsync(result.Id, x.Id)).Select(y => new VariableDetailDto
                     {
                         Id = y.Id,
                         Code = y.Data.Code,

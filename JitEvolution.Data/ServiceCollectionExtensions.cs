@@ -1,7 +1,8 @@
 ﻿using JitEvolution.Core.Models.Identity;
-using JitEvolution.Core.Repositories.Analyzer;
+using JitEvolution.Core.Repositories.IDE;
 using JitEvolution.Core.Repositories.Identity;
 using JitEvolution.Data.Repositories;
+using JitEvolution.Data.Repositories.IDE;
 using JitEvolution.Data.Repositories.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ namespace JitEvolution.Data
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
 
             return services;
         }

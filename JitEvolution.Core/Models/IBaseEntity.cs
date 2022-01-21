@@ -22,6 +22,6 @@ namespace JitEvolution.Core.Models
 
         User ChangedBy { get; set; }
 
-        User DeletedBy { get; set; }
+        User? DeletedBy { get; set; }
     }
 }

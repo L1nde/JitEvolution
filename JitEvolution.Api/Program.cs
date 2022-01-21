@@ -3,12 +3,16 @@ using JitEvolution.BusinessObjects;
 using JitEvolution.Config;
 using JitEvolution.Data;
 using JitEvolution.Neo4J.Data;
+using JitEvolution.Notifications;
 using JitEvolution.Services;
 using JitEvolution.Services.Identity;
 using JitEvolution.SignalR.Hubs;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,12 @@ builder.Services.RegisterIdentity();
 builder.Services.RegisterBusinessObjects();
 builder.Services.RegisterServices();
 builder.Services.RegisterNeo4JServices();
+
+builder.Services.AddMediatR(
+    Assembly.GetExecutingAssembly(),
+    Assembly.GetAssembly(typeof(JitEvolutionHub)),
+    Assembly.GetAssembly(typeof(JitEvolution.Services.ServiceCollectionExtensions)),
+    Assembly.GetAssembly(typeof(ProjectAdded)));
 
 builder.Services.AddOptions();
 builder.Services.Configure<Configuration>(builder.Configuration.GetSection("JitEvolution"));
@@ -76,7 +86,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("Development");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseRouting();
 

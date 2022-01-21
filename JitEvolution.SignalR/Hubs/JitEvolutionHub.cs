@@ -21,8 +21,6 @@ namespace JitEvolution.SignalR.Hubs
             {
                 return;
             }
-
-            await Clients.Caller.SendAsync("Test");
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

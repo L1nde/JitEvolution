@@ -4,6 +4,6 @@ namespace JitEvolution.Core.Repositories.Analyzer
 {
     public interface IClassRepository
     {
-        Task<IEnumerable<Result<Class>>> GetAll(long appId, string? filter = null);
+        Task<IEnumerable<Result<Class>>> GetAllAsync(long appId, string? filter = null);
     }
 }

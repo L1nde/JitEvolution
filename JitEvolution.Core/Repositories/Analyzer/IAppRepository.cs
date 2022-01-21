@@ -4,8 +4,8 @@ namespace JitEvolution.Core.Repositories.Analyzer
 {
     public interface IAppRepository
     {
-        Task<IEnumerable<Result<App>>> GetAll();
+        Task<IEnumerable<Result<App>>> GetAllAsync();
 
-        Task<Result<App>> Get(long appId);
+        Task<Result<App>> GetAsync(string projectId);
     }
 }

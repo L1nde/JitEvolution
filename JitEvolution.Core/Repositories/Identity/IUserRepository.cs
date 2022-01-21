@@ -2,12 +2,8 @@
 
 namespace JitEvolution.Core.Repositories.Identity
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseCrudRepository<User>
     {
         Task<User?> GetByApiKeyAsync(string accessKey);
-
-        Task<User> AddAsync(User user);
-
-        Task SaveChangesAsync();
     }
 }

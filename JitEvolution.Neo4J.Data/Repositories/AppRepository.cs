@@ -10,7 +10,7 @@ namespace JitEvolution.Neo4J.Data.Repositories
         {
         }
 
-        public async Task<IEnumerable<Result<App>>> GetAll()
+        public async Task<IEnumerable<Result<App>>> GetAllAsync()
         {
             var model = await (await ClientAsync()).Cypher.Match("(app:App)")
                 .Where("not(app)-[:CHANGED_TO]-(:App)")
@@ -20,27 +20,16 @@ namespace JitEvolution.Neo4J.Data.Repositories
             return model.Select(x => new Result<App>(x.Id, x.Data));
         }
 
-        public async Task<Result<App>> Get(long appId)
+        public async Task<Result<App>> GetAsync(string projectId)
         {
             var model = await(await ClientAsync()).Cypher
                 .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)")
                 .Where($"not(app)-[:CHANGED_TO]->(:App)")
-                .AndWhere($"ID(app) = {appId}")
+                .AndWhere($"app.appKey = '{projectId}'")
                 .Return(app => new { Id = app.Id(), Data = app.As<App>() })
                 .ResultsAsync;
 
             var item = model.FirstOrDefault();
-
-            //var model = (await ClientAsync()).Cypher
-            //    .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)-[:CLASS_OWNS_METHOD]->(method:Method)")
-            //    .Where($"not(app)-[:CHANGED_TO]->(:App)")
-            //    .AndWhere("not(method)-[:CHANGED_TO]->(:Method)")
-            //    .AndWhere("method.start_line <> 0 and method.end_line <> 0")
-            //    .AndWhere($"ID(app) = {appId}")
-            //    .Return((app, class1) => new { Id = app.Id(), App = app.As<App>(), Class = class1.As<Class>() })
-            //    .ResultsAsync;
-
-            //var item = model.FirstOrDefault();
 
             return new Result<App>(item.Id, item.Data);
         }

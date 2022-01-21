@@ -17,7 +17,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
         [HttpGet]
         public async Task<IEnumerable<ClassDto>> GetAll(long appKey)
         {
-            return (await _classRepository.GetAll(appKey)).Select(x => new ClassDto
+            return (await _classRepository.GetAllAsync(appKey)).Select(x => new ClassDto
             {
                 Id = x.Id,
                 Code = x.Data.Code,

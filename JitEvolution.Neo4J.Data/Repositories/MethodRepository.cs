@@ -12,7 +12,7 @@ namespace JitEvolution.Neo4J.Data.Repositories
         {
         }
 
-        public async Task<IEnumerable<Result<Method>>> GetAll(long appId, long classId, string? filter = null)
+        public async Task<IEnumerable<Result<Method>>> GetAllAsync(long appId, long classId, string? filter = null)
         {
             var query = (await ClientAsync()).Cypher
                 .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)-[:CLASS_OWNS_METHOD]->(method:Method)")
@@ -32,7 +32,7 @@ namespace JitEvolution.Neo4J.Data.Repositories
 
             return model.Select(x => new Result<Method>(x.Id, x.Data));
         }
-        public async Task<IEnumerable<Result<Relationship>>> GetAllRelationships(long appId, long classId, string? filter = null)
+        public async Task<IEnumerable<Result<Relationship>>> GetAllRelationshipsAsync(long appId, long classId, string? filter = null)
         {
             var query = (await ClientAsync()).Cypher
                 .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)-[:CLASS_OWNS_METHOD]->(method:Method)-[relationship1:CALLS]->()")
