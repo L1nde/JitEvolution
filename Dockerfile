@@ -20,7 +20,7 @@ RUN dotnet tool install -g dotnet-ef
 ENV PATH="${PATH}:/root/.dotnet/tools"
 RUN dotnet ef migrations script --configuration Release --no-build -i -p JitEvolution.Data/ -s JitEvolution.Api/ -o out/databaseMigrations.sql
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-buster-slim-arm32v7
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim-arm64
 ENV ASPNETCORE_URLS=http://*:80
 WORKDIR /app
 COPY --from=build-env /app/out .
