@@ -32,16 +32,16 @@ jobs:
           context: .
           tags: ${{ secrets.REGISTRY_URL }}/jit-evolution:latest
           push: true
-  #deploy:
-  #  needs: ["build"]
-  #  runs-on: ubuntu-latest
+  deploy:
+    needs: ["build"]
+    runs-on: ubuntu-latest
     
-  #  steps:
-   # - name: SSH Remote Commands
-    #  uses: appleboy/ssh-action@v0.1.4
-     # with:
-      #  host: ${{ secrets.SSH_HOST }}
-       # username: ${{ secrets.SSH_USERNAME }}
-        #key: ${{ secrets.SSH_KEY }}
-        #script: docker-compose -f ~/ProjectLima/docker-compose.api.yml pull && ./ProjectLima/migrate-database.sh && docker-compose -f ~/ProjectLima/docker-compose.api.yml up -d
-        #script_stop: true
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: docker-compose -f ~/jit-evolution/docker-compose.yml pull && ./jit-evolution/migrate.sh && docker-compose -f ~/jit-evolution/docker-compose.yml up -d
+        script_stop: true
