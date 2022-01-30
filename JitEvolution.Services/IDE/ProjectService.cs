@@ -3,6 +3,7 @@ using JitEvolution.Config;
 using JitEvolution.Core.Repositories.IDE;
 using JitEvolution.Core.Services.IDE;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.IO.Compression;
 
@@ -14,11 +15,11 @@ namespace JitEvolution.Services.IDE
         private readonly CurrentUser _currentUser;
         private readonly Configuration _config;
 
-        public ProjectService(IProjectRepository projectRepository, CurrentUser currentUser, Configuration config)
+        public ProjectService(IProjectRepository projectRepository, CurrentUser currentUser, IOptions<Configuration> config)
         {
             _projectRepository = projectRepository;
             _currentUser = currentUser;
-            _config = config;
+            _config = config.Value;
         }
 
         public async Task CreateAsync(string projectId, IFormFile projectZipFile)
