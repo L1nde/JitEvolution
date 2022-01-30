@@ -26,6 +26,6 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80
 
-COPY --from=docker /usr/local/bin/docker /usr/local/bin/
+COPY --from=docker@sha256:17db01f277a58c2d70b2a40a8f46607c5319dd2f23c55dcf8c835cd25f7ff746 /usr/local/bin/docker /usr/local/bin/
 
 ENTRYPOINT ["dotnet", "JitEvolution.Api.dll"]
