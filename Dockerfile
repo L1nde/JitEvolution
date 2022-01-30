@@ -15,10 +15,10 @@ COPY ["JitEvolution.SignalR/JitEvolution.SignalR.csproj", "JitEvolution.SignalR/
 RUN dotnet restore "JitEvolution.Api/JitEvolution.Api.csproj"
 
 COPY . .
-RUN dotnet publish "JitEvolution.Api/JitEvolution.Api.csproj" -c Release -o out
+RUN dotnet publish "JitEvolution.Api/JitEvolution.Api.csproj" -c Debug -o out
 RUN dotnet tool install -g dotnet-ef
 ENV PATH="${PATH}:/root/.dotnet/tools"
-RUN dotnet ef migrations script --configuration Release --no-build -i -p JitEvolution.Data/ -s JitEvolution.Api/ -o out/databaseMigrations.sql
+RUN dotnet ef migrations script --configuration Debug --no-build -i -p JitEvolution.Data/ -s JitEvolution.Api/ -o out/databaseMigrations.sql
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim-arm64v8
 ENV ASPNETCORE_URLS=http://*:80
