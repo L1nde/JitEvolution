@@ -37,17 +37,21 @@ namespace JitEvolution.Services.IDE
             var processinfo = new ProcessStartInfo("docker", $"run --rm -it -v {extractedPath.TemporaryPath}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
             {
                 UseShellExecute = false,
-                //RedirectStandardOutput = true,
-                //RedirectStandardError = true
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
             };
 
-            using var process = Process.Start(processinfo);
-            if (process != null)
-            {
-                await process.WaitForExitAsync();
-                var t = process.ExitCode;
-            }
-            else
+            using var process = new Process();
+            process.StartInfo = processinfo;
+            process.OutputDataReceived += OutputReceived;
+            process.ErrorDataReceived += OutputReceived;
+
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            await process.WaitForExitAsync();
+
+            if (process.ExitCode != 0)
             {
                 throw new Exception("Failed to start analyzer");
             }
@@ -63,6 +67,11 @@ namespace JitEvolution.Services.IDE
                 await _projectRepository.SaveChangesAsync();
             }
 
+        }
+
+        private void OutputReceived(object sender, DataReceivedEventArgs e)
+        {
+            Debug.WriteLine(e.Data);
         }
 
         private class UseTemporaryPath : IDisposable
