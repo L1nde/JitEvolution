@@ -14,7 +14,7 @@ namespace JitEvolution.Neo4J.Data
             services.AddSingleton<IGraphClient, GraphClient>(services =>
             {
                 var config = services.GetRequiredService<IOptions<Configuration>>().Value;
-                return new GraphClient(new Uri(config.Neo4J.Uri), config.Neo4J.Username, config.Neo4J.Password);
+                return new GraphClient(new Uri(config.GraphifyEvolution.Neo4J.Uri), config.GraphifyEvolution.Neo4J.Username, config.GraphifyEvolution.Neo4J.Password);
             });
 
             services.AddScoped<IAppRepository, AppRepository>();

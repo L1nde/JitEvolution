@@ -1,4 +1,5 @@
 ﻿using JitEvolution.BusinessObjects.Identity;
+using JitEvolution.Config;
 using JitEvolution.Core.Repositories.IDE;
 using JitEvolution.Core.Services.IDE;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +12,13 @@ namespace JitEvolution.Services.IDE
     {
         private readonly IProjectRepository _projectRepository;
         private readonly CurrentUser _currentUser;
+        private readonly Configuration _config;
 
-        public ProjectService(IProjectRepository projectRepository, CurrentUser currentUser)
+        public ProjectService(IProjectRepository projectRepository, CurrentUser currentUser, Configuration config)
         {
             _projectRepository = projectRepository;
             _currentUser = currentUser;
+            _config = config;
         }
 
         public async Task CreateAsync(string projectId, IFormFile projectZipFile)
@@ -30,7 +33,7 @@ namespace JitEvolution.Services.IDE
             ZipFile.ExtractToDirectory(zipPath.TemporaryPath, extractedPath.TemporaryPath, true);
 
             // This is probably dangerous. Need to sanitize arguments
-            var processinfo = new ProcessStartInfo("docker", $"run --rm -it -v {extractedPath.TemporaryPath}:/source t analyse /source --language java --app-key \"{projectId}\"")
+            var processinfo = new ProcessStartInfo("docker", $"run --rm -it -v {extractedPath.TemporaryPath}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
             {
                 UseShellExecute = false,
                 //RedirectStandardOutput = true,
