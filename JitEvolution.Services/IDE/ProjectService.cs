@@ -72,6 +72,7 @@ namespace JitEvolution.Services.IDE
         private void OutputReceived(object sender, DataReceivedEventArgs e)
         {
             Debug.WriteLine(e.Data);
+            Console.WriteLine(e.Data);
         }
 
         private class UseTemporaryPath : IDisposable
