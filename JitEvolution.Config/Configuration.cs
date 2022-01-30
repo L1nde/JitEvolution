@@ -20,7 +20,9 @@
 
         public virtual string DockerImageName { get; set; }
 
-        public virtual string SourceFolderPath { get; set; }
+        public virtual string DockerVolumeName { get; set; }
+
+        public virtual string SourcesDirectoryPath { get; set; }
     }
 
     public class Neo4j

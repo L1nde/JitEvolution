@@ -24,7 +24,7 @@ namespace JitEvolution.Services.IDE
 
         public async Task CreateAsync(string projectId, IFormFile projectZipFile)
         {
-            using var extractedPath = new UseTemporaryFile(_config.GraphifyEvolution.SourceFolderPath);
+            using var extractedPath = new UseTemporaryFile(_config.GraphifyEvolution.SourcesDirectoryPath);
             using var zipPath = new UseTemporaryFile();
             using (var fileStream = new FileStream(zipPath.TemporaryPath, FileMode.Create))
             {
@@ -34,7 +34,7 @@ namespace JitEvolution.Services.IDE
             ZipFile.ExtractToDirectory(zipPath.TemporaryPath, extractedPath.TemporaryPath, true);
 
             // This is probably dangerous. Need to sanitize arguments
-            var processinfo = new ProcessStartInfo("docker", $"run --rm -v /home/deploy/jit-evolution/tmp/{extractedPath.FileName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
+            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
