@@ -25,4 +25,7 @@ ENV ASPNETCORE_URLS=http://*:80
 WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80
+
+COPY --from=docker /usr/local/bin/docker /usr/local/bin/
+
 ENTRYPOINT ["dotnet", "JitEvolution.Api.dll"]
