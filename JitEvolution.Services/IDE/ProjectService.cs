@@ -24,8 +24,8 @@ namespace JitEvolution.Services.IDE
 
         public async Task CreateAsync(string projectId, IFormFile projectZipFile)
         {
-            using var extractedPath = new UseTemporaryPath();
-            using var zipPath = new UseTemporaryPath();
+            using var extractedPath = new UseTemporaryFile(_config.GraphifyEvolution.SourceFolderPath);
+            using var zipPath = new UseTemporaryFile();
             using (var fileStream = new FileStream(zipPath.TemporaryPath, FileMode.Create))
             {
                 await projectZipFile.CopyToAsync(fileStream);
@@ -34,7 +34,7 @@ namespace JitEvolution.Services.IDE
             ZipFile.ExtractToDirectory(zipPath.TemporaryPath, extractedPath.TemporaryPath, true);
 
             // This is probably dangerous. Need to sanitize arguments
-            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {extractedPath.TemporaryPath}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
+            var processinfo = new ProcessStartInfo("docker", $"run --rm -v /home/deploy/jit-evolution/tmp/{extractedPath.FileName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -75,13 +75,19 @@ namespace JitEvolution.Services.IDE
             Console.WriteLine(e.Data);
         }
 
-        private class UseTemporaryPath : IDisposable
+        private class UseTemporaryFile : IDisposable
         {
             public readonly string TemporaryPath;
+            public readonly string FileName;
 
-            public UseTemporaryPath()
+            public UseTemporaryFile() :this(Path.GetTempPath())
             {
-                TemporaryPath = $"{Path.GetTempPath()}/{Path.GetRandomFileName()}";
+            }
+
+            public UseTemporaryFile(string folderPath)
+            {
+                FileName = Path.GetRandomFileName();
+                TemporaryPath = $"{folderPath}/{FileName}";
             }
 
             public void Dispose()

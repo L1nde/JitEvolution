@@ -19,6 +19,8 @@
         public virtual Neo4j Neo4J { get; set; }
 
         public virtual string DockerImageName { get; set; }
+
+        public virtual string SourceFolderPath { get; set; }
     }
 
     public class Neo4j
