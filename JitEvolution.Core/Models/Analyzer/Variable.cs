@@ -2,8 +2,11 @@
 
 namespace JitEvolution.Core.Models.Analyzer
 {
-    public class Variable : INode
+    public class Variable : INode, IEquatable<Variable?>
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("code")]
         public string Code { get; set; }
 
@@ -27,5 +30,28 @@ namespace JitEvolution.Core.Models.Analyzer
 
         [JsonProperty("version_number")]
         public int VersionNumber { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Variable);
+        }
+
+        public bool Equals(Variable? other)
+        {
+            return other != null &&
+                   Code == other.Code &&
+                   Name == other.Name &&
+                   EndLine == other.EndLine &&
+                   Kind == other.Kind &&
+                   StartLine == other.StartLine &&
+                   Type == other.Type &&
+                   Usr == other.Usr &&
+                   VersionNumber == other.VersionNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Code, Name, EndLine, Kind, StartLine, Type, Usr, VersionNumber);
+        }
     }
 }

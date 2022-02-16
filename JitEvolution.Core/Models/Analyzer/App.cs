@@ -12,5 +12,8 @@ namespace JitEvolution.Core.Models.Analyzer
 
         [JsonProperty("version_number")]
         public int VersionNumber { get; set; }
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

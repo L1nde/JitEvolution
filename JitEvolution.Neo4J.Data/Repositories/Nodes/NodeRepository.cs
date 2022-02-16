@@ -56,7 +56,7 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
             //return model;
 
             properties.Add("id", id);
-            properties.Add("state", NodeStateEnum.Current);
+            properties.Add("version", version);
             var propertiesString = "{ " + string.Join(", ", properties.Select(x => x.Key + $": '{x.Value}'")) + " }";
 
             var client = await ClientAsync();
@@ -72,12 +72,70 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
             return model;
         }
 
-        public async Task<IEnumerable<Result<TEntity>>> GetAllAsync(string appKey, NodeStateEnum state)
+        public Task<IEnumerable<Result<TEntity>>> GetAllForAsync(string appKey, string version)
+        {
+            return GetAllAsync(appKey, $"n.version = '{version}'");
+        }
+
+        public Task<IEnumerable<Result<TEntity>>> GetAllLatestAsync(string appKey, string exludeVersion)
+        {
+            return GetAllAsync(appKey, $"not(n)-[:CHANGED_TO]->(:{Label}) AND n.version <> '{exludeVersion}'");
+        }
+
+        public async Task AddRelationshipAsync(string fromId, string toId, string type)
         {
             var client = await ClientAsync();
 
-            var models = await client.Cypher.Match($"(n:{Label}{{state: '{state}', appKey: '{appKey}'}})")
-                .Return(n => new { Id = n.Id(), Data = n.As<TEntity>() })
+            await client.Cypher.Match($"(a), (c)")
+                .Where($"a.id = '{fromId}' and c.id = '{toId}'")
+                .Merge($"(a)-[r:{type}]->(c)")
+                .Return(r => new { Id = r.Id() })
+                .ResultsAsync;
+        }
+
+        public async Task AddRelationshipAsync(long fromId, long toId, string type)
+        {
+            var client = await ClientAsync();
+
+            await client.Cypher.Match($"(a), (c)")
+                .Where($"id(a) = {fromId} and id(c) = {toId}")
+                .Merge($"(a)-[r:{type}]->(c)")
+                .Return(r => new { Id = r.Id() })
+                .ResultsAsync;
+        }
+
+        public async Task DeleteWithRelationshipAsync(long id)
+        {
+            var client = await ClientAsync();
+
+            await client.Cypher.Match($"(a:{Label})")
+                .Where($"id(a) = {id}")
+                .DetachDelete("a")
+                .ExecuteWithoutResultsAsync();
+        }
+
+        public async Task DeleteRelationshipAsync(long id)
+        {
+            var client = await ClientAsync();
+
+            await client.Cypher.Match($"()-[r]->()")
+                .Where($"id(r) = {id}")
+                .DetachDelete("r")
+                .ExecuteWithoutResultsAsync();
+        }
+
+        private async Task<IEnumerable<Result<TEntity>>> GetAllAsync(string appKey, string? filter = null)
+        {
+            var client = await ClientAsync();
+
+            var query = client.Cypher.Match($"(n:{Label}{{appKey: '{appKey}'}})");
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                query = query.Where(filter);
+            }
+
+            var models = await query.Return(n => new { Id = n.Id(), Data = n.As<TEntity>() })
                 .ResultsAsync;
 
             return models.Select(x => new Result<TEntity>(x.Id, x.Data));
@@ -87,7 +145,7 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
         {
             var client = await ClientAsync();
 
-            var models = await client.Cypher.Match($"(n:{Label})-[r]->()")
+            var models = await client.Cypher.Match($"(n:{Label})<-[r]-()")
                 .Where($"id(n) = {id}")
                 .Return(r => new { Id = r.Id(), Start = Return.As<long>("ID(startNode(r))"), End = Return.As<long>("ID(endNode(r))"), Type = r.Type() })
                 .ResultsAsync;
@@ -100,11 +158,11 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
             }));
         }
 
-        public async Task<IEnumerable<Result<Core.Models.Analyzer.Relationship>>> GetOutGoingRelationshipsAsync(long id)
+        public async Task<IEnumerable<Result<Core.Models.Analyzer.Relationship>>> GetOutgoingRelationshipsAsync(long id)
         {
             var client = await ClientAsync();
 
-            var models = await client.Cypher.Match($"(n:{Label})<-[r]-()")
+            var models = await client.Cypher.Match($"(n:{Label})-[r]->()")
                 .Where($"id(n) = {id}")
                 .Return(r => new { Id = r.Id(), Start = Return.As<long>("ID(startNode(r))"), End = Return.As<long>("ID(endNode(r))"), Type = r.Type() })
                 .ResultsAsync;

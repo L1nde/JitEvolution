@@ -2,8 +2,11 @@
 
 namespace JitEvolution.Core.Models.Analyzer
 {
-    public class Method : INode
+    public class Method : INode, IEquatable<Method?>
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("code")]
         public string Code { get; set; }
 
@@ -54,5 +57,55 @@ namespace JitEvolution.Core.Models.Analyzer
 
         [JsonProperty("version_number")]
         public int VersionNumber { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Method);
+        }
+
+        public bool Equals(Method? other)
+        {
+            return other != null &&
+                   Code == other.Code &&
+                   CyclomaticComplexity == other.CyclomaticComplexity &&
+                   EndLine == other.EndLine &&
+                   IsConstructor == other.IsConstructor &&
+                   IsSetter == other.IsSetter &&
+                   IsGetter == other.IsGetter &&
+                   Kind == other.Kind &&
+                   MaxNestingDepth == other.MaxNestingDepth &&
+                   Name == other.Name &&
+                   NumberOfAccessedVariables == other.NumberOfAccessedVariables &&
+                   NumberOfCalledMethods == other.NumberOfCalledMethods &&
+                   NumberOfCallers == other.NumberOfCallers &&
+                   NumberOfInstructors == other.NumberOfInstructors &&
+                   StartLine == other.StartLine &&
+                   Type == other.Type &&
+                   Usr == other.Usr &&
+                   VersionNumber == other.VersionNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hash = new HashCode();
+            hash.Add(Code);
+            hash.Add(CyclomaticComplexity);
+            hash.Add(EndLine);
+            hash.Add(IsConstructor);
+            hash.Add(IsSetter);
+            hash.Add(IsGetter);
+            hash.Add(Kind);
+            hash.Add(MaxNestingDepth);
+            hash.Add(Name);
+            hash.Add(NumberOfAccessedVariables);
+            hash.Add(NumberOfCalledMethods);
+            hash.Add(NumberOfCallers);
+            hash.Add(NumberOfInstructors);
+            hash.Add(StartLine);
+            hash.Add(Type);
+            hash.Add(Usr);
+            hash.Add(VersionNumber);
+            return hash.ToHashCode();
+        }
     }
 }

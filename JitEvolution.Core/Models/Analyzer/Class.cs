@@ -28,6 +28,9 @@ namespace JitEvolution.Core.Models.Analyzer
         [JsonProperty("version_number")]
         public int VersionNumber { get; set; }
 
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         public override bool Equals(object? obj)
         {
             return Equals(obj as Class);

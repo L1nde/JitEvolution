@@ -50,21 +50,117 @@ namespace JitEvolution.Services.Analyzer.GraphifyEvolution
 
         public async Task MergeDuplicatesAsync(string appKey, string version)
         {
-            await MergeClassesAsync(appKey);
+            await MergeAppDuplicates(appKey, version);
+            await MergeClassDuplicates(appKey, version);
+            await MergeVariablesDuplicates(appKey, version);
+            await MergeMethodDuplicates(appKey, version);
         }
 
-        private async Task MergeClassesAsync(string appKey)
+        private async Task MergeAppDuplicates(string appKey, string version)
         {
-            var newClasses = await _classRepository.GetAllAsync(appKey, NodeStateEnum.New);
-            var currentClasses = await _classRepository.GetAllAsync(appKey, NodeStateEnum.Current);
+            var newApps = await _appRepository.GetAllForAsync(appKey, version);
+            var apps = await _appRepository.GetAllLatestAsync(appKey, version);
 
-            foreach (var newClass in newClasses)
+            if (apps.Any() && newApps.Any())
             {
-                var current = currentClasses.FirstOrDefault(x => x.Data.Equals(newClass.Data));
-                if (current != null)
+                await _appRepository.AddRelationshipAsync(apps.First().Data.Id, newApps.First().Data.Id, "CHANGED_TO");
+            }
+        }
+
+        private async Task MergeClassDuplicates(string appKey, string version)
+        {
+            var newClasses = await _classRepository.GetAllForAsync(appKey, version);
+            var classes = await _classRepository.GetAllLatestAsync(appKey, version);
+
+            if (classes.Any())
+            {
+                foreach (var newClass in newClasses)
                 {
-                    var newRelationships = await _classRepository.GetOutGoingRelationshipsAsync(newClass.Id);
-                    var currentRelationships = await _classRepository.GetOutGoingRelationshipsAsync(current.Id);
+                    var class1 = classes.FirstOrDefault(x => x.Data.Usr == newClass.Data.Usr);
+                    if (class1 != null)
+                    {
+                        await _classRepository.AddRelationshipAsync(class1.Data.Id, newClass.Data.Id, "CHANGED_TO");
+                    }
+                }
+            }
+        }
+
+        private async Task MergeMethodDuplicates(string appKey, string version)
+        {
+            var newMethods = await _methodRepository.GetAllForAsync(appKey, version);
+            var methods = await _methodRepository.GetAllLatestAsync(appKey, version);
+
+            if (methods.Any())
+            {
+                foreach (var newMethod in newMethods)
+                {
+                    var outgoings = await _methodRepository.GetOutgoingRelationshipsAsync(newMethod.Id);
+
+                    var method = methods.FirstOrDefault(x => newMethod.Data.Equals(x.Data));
+                    if (method == null || outgoings.Any())
+                    {
+                        var relatedMethod = method ?? methods.FirstOrDefault(x => newMethod.Data.Usr == x.Data.Usr);
+                        if (relatedMethod != null)
+                        {
+                            await _methodRepository.AddRelationshipAsync(relatedMethod.Data.Id, newMethod.Data.Id, "CHANGED_TO");
+                        }
+                    }
+                    else
+                    {
+                        var incomings = await _methodRepository.GetIncomingRelationshipsAsync(newMethod.Id);
+                        foreach (var incoming in incomings)
+                        {
+                            await _methodRepository.AddRelationshipAsync(incoming.Data.Start, method.Id, incoming.Data.Type);
+                        }
+
+                        foreach (var outgoing in outgoings)
+                        {
+                            await _methodRepository.AddRelationshipAsync(method.Id, outgoing.Data.End, outgoing.Data.Type);
+                        }
+
+                        await _methodRepository.DeleteWithRelationshipAsync(newMethod.Id);
+                        
+                    }
+                }
+            }
+        }
+
+        private async Task MergeVariablesDuplicates(string appKey, string version)
+        {
+            var newVariables = await _variableRepository.GetAllForAsync(appKey, version);
+            var variables = await _variableRepository.GetAllLatestAsync(appKey, version);
+
+            if (variables.Any())
+            {
+                foreach (var newVariable in newVariables)
+                {
+                    var variable = variables.FirstOrDefault(x => newVariable.Data.Equals(x.Data));
+                    if (variable == null)
+                    {
+                        var relatedVariable = variables.FirstOrDefault(x => newVariable.Data.Usr == x.Data.Usr);
+                        if (relatedVariable != null)
+                        {
+                            await _methodRepository.AddRelationshipAsync(relatedVariable.Data.Id, newVariable.Data.Id, "CHANGED_TO");
+                        }
+                    }
+                    else
+                    {
+                        var incomings = await _variableRepository.GetIncomingRelationshipsAsync(newVariable.Id);
+                        foreach (var incoming in incomings)
+                        {
+                            await _variableRepository.AddRelationshipAsync(incoming.Data.Start, variable.Id, incoming.Data.Type);
+                            await _variableRepository.DeleteRelationshipAsync(incoming.Id);
+                        }
+
+                        var outgoings = await _variableRepository.GetOutgoingRelationshipsAsync(newVariable.Id);
+                        foreach (var outgoing in outgoings)
+                        {
+                            await _variableRepository.AddRelationshipAsync(variable.Id, outgoing.Data.End, outgoing.Data.Type);
+                            await _variableRepository.DeleteRelationshipAsync(outgoing.Id);
+                        }
+
+                        await _variableRepository.DeleteWithRelationshipAsync(newVariable.Id);
+                    }
                 }
             }
         }
