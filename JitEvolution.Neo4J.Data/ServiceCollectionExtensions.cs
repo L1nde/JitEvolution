@@ -1,6 +1,6 @@
 ﻿using JitEvolution.Config;
-using JitEvolution.Core.Repositories.Analyzer;
-using JitEvolution.Neo4J.Data.Repositories;
+using JitEvolution.Core.Repositories.Analyzer.Nodes;
+using JitEvolution.Neo4J.Data.Repositories.Nodes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Neo4jClient;
@@ -21,6 +21,7 @@ namespace JitEvolution.Neo4J.Data
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<IMethodRepository, MethodRepository>();
             services.AddScoped<IVariableRepository, VariableRepository>();
+            services.AddScoped<IParameterRepository, ParameterRepository>();
 
             return services;
         }

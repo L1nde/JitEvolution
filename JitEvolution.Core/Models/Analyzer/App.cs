@@ -2,7 +2,7 @@
 
 namespace JitEvolution.Core.Models.Analyzer
 {
-    public class App : AnalyzerModel
+    public class App : INode
     {
         [JsonProperty("name")]
         public string Name { get; set; }

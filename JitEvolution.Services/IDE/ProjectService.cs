@@ -34,7 +34,7 @@ namespace JitEvolution.Services.IDE
             ZipFile.ExtractToDirectory(zipPath.TemporaryPath, extractedPath.TemporaryPath, true);
 
             // This is probably dangerous. Need to sanitize arguments
-            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source --language java --app-key \"{projectId}\"")
+            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source/{extractedPath.FileName} --language java --app-key \"{projectId}\"")
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,

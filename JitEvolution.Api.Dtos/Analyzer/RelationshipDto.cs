@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace JitEvolution.Core.Models.Analyzer
+namespace JitEvolution.Api.Dtos.Analyzer
 {
     [DataContract]
     public class RelationshipDto

@@ -1,6 +1,6 @@
 ﻿namespace JitEvolution.Core.Models.Analyzer
 {
-    public struct Result<TModel> where TModel : AnalyzerModel
+    public class Result<TModel> where TModel : AnalyzerModel
     {
         public Result(long id, TModel data)
         {

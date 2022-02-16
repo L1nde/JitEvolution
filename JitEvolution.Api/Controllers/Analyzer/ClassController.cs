@@ -1,5 +1,5 @@
 ﻿using JitEvolution.Api.Dtos.Analyzer;
-using JitEvolution.Core.Repositories.Analyzer;
+using JitEvolution.Core.Repositories.Analyzer.Nodes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JitEvolution.Api.Controllers.Analyzer

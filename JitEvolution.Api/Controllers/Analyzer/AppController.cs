@@ -1,5 +1,5 @@
 ﻿using JitEvolution.Api.Dtos.Analyzer;
-using JitEvolution.Core.Repositories.Analyzer;
+using JitEvolution.Core.Repositories.Analyzer.Nodes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JitEvolution.Api.Controllers.Analyzer
@@ -35,7 +35,12 @@ namespace JitEvolution.Api.Controllers.Analyzer
         [HttpGet()]
         public async Task<AppDetailDto> Get(string projectId)
         {
-            var result = await _appRepository.GetAsync(projectId);
+            var result = await _appRepository.GetByAppKeyAsync(projectId);
+
+            if (result == null)
+            {
+                return null;
+            }
 
             return new AppDetailDto
             {
@@ -75,7 +80,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
                         Usr = y.Data.Usr,
                         VersionNumber = y.Data.VersionNumber,
                     }),
-                    MethodsCalls = (await _methodRepository.GetAllRelationshipsAsync(result.Id, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new Core.Models.Analyzer.RelationshipDto
+                    MethodsCalls = (await _methodRepository.GetAllRelationshipsAsync(result.Id, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new RelationshipDto
                     {
                         Type = y.Data.Type,
                         Start = y.Data.Start,

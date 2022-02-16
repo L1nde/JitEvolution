@@ -1,5 +1,4 @@
-﻿using JitEvolution.Core.Models.Analyzer;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace JitEvolution.Api.Dtos.Analyzer
 {
