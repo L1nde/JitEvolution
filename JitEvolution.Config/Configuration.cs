@@ -18,6 +18,10 @@
     {
         public virtual Neo4j Neo4J { get; set; }
 
+        public virtual string ApiUrl { get; set; }
+
+        public virtual string Port { get; set; }
+
         public virtual string DockerImageName { get; set; }
 
         public virtual string DockerVolumeName { get; set; }

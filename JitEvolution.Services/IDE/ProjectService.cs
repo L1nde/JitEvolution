@@ -34,7 +34,7 @@ namespace JitEvolution.Services.IDE
             ZipFile.ExtractToDirectory(zipPath.TemporaryPath, extractedPath.TemporaryPath, true);
 
             // This is probably dangerous. Need to sanitize arguments
-            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source/{extractedPath.FileName} --language java --app-key \"{projectId}\" --neo4j-host host.docker.internal --neo4j-port 5259 --neo4j-username neo4j --neo4j-password 1234")
+            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source/{extractedPath.FileName} --language java --app-key \"{projectId}\" --neo4j-host {_config.GraphifyEvolution.ApiUrl} --neo4j-port {_config.GraphifyEvolution.Port} --neo4j-username neo4j --neo4j-password 1234")
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
