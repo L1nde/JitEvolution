@@ -13,7 +13,10 @@ namespace JitEvolution.Neo4J.Data.Repositories
 
         protected async Task<ICypherGraphClient> ClientAsync()
         {
-            await _graphClient.ConnectAsync();
+            if (!_graphClient.IsConnected)
+            {
+                await _graphClient.ConnectAsync();
+            }
 
             return _graphClient;
         }

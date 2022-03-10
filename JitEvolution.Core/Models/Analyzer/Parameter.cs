@@ -18,5 +18,8 @@ namespace JitEvolution.Core.Models.Analyzer
 
         [JsonProperty("position")]
         public int Position { get; set; }
+
+        [JsonProperty("version")]
+        public string Version { get; set; }
     }
 }

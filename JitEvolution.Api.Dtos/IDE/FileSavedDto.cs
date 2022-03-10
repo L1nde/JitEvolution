@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Microsoft.AspNetCore.Http;
+using System.Runtime.Serialization;
 
 namespace JitEvolution.Api.Dtos.IDE
 {
@@ -6,7 +7,7 @@ namespace JitEvolution.Api.Dtos.IDE
     public class FileSavedDto
     {
         [DataMember]
-        public string Content { get; set; }
+        public IFormFile ProjectZip { get; set; }
 
         [DataMember]
         public string Uri { get; set; }

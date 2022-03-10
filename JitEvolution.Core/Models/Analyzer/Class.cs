@@ -28,8 +28,20 @@ namespace JitEvolution.Core.Models.Analyzer
         [JsonProperty("version_number")]
         public int VersionNumber { get; set; }
 
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
+        [JsonProperty("added_on")]
+        public int AddedOn { get; set; }
+
         [JsonProperty("id")]
         public string Id { get; set; }
+
+        [JsonProperty("methods")]
+        public Method[] Methods { get; set; }
+
+        [JsonProperty("variables")]
+        public Variable[] Variables { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -44,14 +56,13 @@ namespace JitEvolution.Core.Models.Analyzer
                    Modifier == other.Modifier &&
                    Name == other.Name &&
                    NumberOfLines == other.NumberOfLines &&
-                   Path == other.Path &&
                    Usr == other.Usr &&
                    VersionNumber == other.VersionNumber;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Code, Kind, Modifier, Name, NumberOfLines, Path, Usr, VersionNumber);
+            return HashCode.Combine(Code, Kind, Modifier, Name, NumberOfLines, Usr, VersionNumber);
         }
     }
 }

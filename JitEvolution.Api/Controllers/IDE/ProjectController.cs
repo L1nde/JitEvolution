@@ -34,12 +34,12 @@ namespace JitEvolution.Api.Controllers.IDE
         {
             if (await _projectRepository.Queryable.AnyAsync(x => x.ProjectId == dto.ProjectId && x.UserId == currentUser.Id))
             {
-                throw new Exception($"User already has project with id \"{dto.ProjectId}\"");
+                //throw new Exception($"User already has project with id \"{dto.ProjectId}\"");
             }
 
             ValidateZipFile(dto.ProjectZip);
             
-            await _projectService.CreateAsync(dto.ProjectId, dto.ProjectZip);
+            await _projectService.CreateOrUpdateAsync(dto.ProjectId, dto.ProjectZip);
 
             await _mediator.Publish(new ProjectAdded());
         }

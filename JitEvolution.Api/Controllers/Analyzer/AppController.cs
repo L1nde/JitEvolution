@@ -20,85 +20,82 @@ namespace JitEvolution.Api.Controllers.Analyzer
             _variableRepository = variableRepository;
         }
 
-        //[HttpGet]
-        //public async Task<IEnumerable<AppDto>> GetAll()
-        //{
-        //    return (await _appRepository.GetAll()).Select(x => new AppDto
-        //    {
-        //        Id = x.Id,
-        //        AppKey = x.Data.AppKey,
-        //        Name = x.Data.Name,
-        //        VersionNumber = x.Data.VersionNumber
-        //    });
-        //}
+        [HttpGet("version-number")]
+        public Task<IEnumerable<int>> GetAppVersions(string projectId)
+        {
+            return _appRepository.GetAppVersionNumbersAsync(projectId);
+        }
 
         [HttpGet()]
-        public async Task<AppDetailDto> Get(string projectId)
+        public async Task<AppDetailDto> Get(string projectId, int? versionNumber)
         {
-            var result = await _appRepository.GetByAppKeyAsync(projectId);
+            var apps = await _appRepository.GetResultAsync(projectId, versionNumber);
 
-            if (result == null)
+            var app = apps.FirstOrDefault();
+
+            if (app == null)
             {
                 return null;
             }
 
             return new AppDetailDto
             {
-                Id = result.Id,
-                AppKey = result.Data.AppKey,
-                Name = result.Data.Name,
-                VersionNumber = result.Data.VersionNumber,
-                Classes = await Task.WhenAll((await _classRepository.GetAllAsync(result.Id)).Select(async x => new ClassDetailDto
+                Id = app.Id,
+                AppKey = app.AppKey,
+                Name = app.Name,
+                VersionNumber = app.VersionNumber,
+                AddedOn = app.AddedOn,
+                Classes = app.Classes.Select(x => new ClassDetailDto
                 {
                     Id = x.Id,
-                    Code = x.Data.Code,
-                    Kind = x.Data.Kind,
-                    Name = x.Data.Name,
-                    Modifier = x.Data.Modifier,
-                    NumberOfLines = x.Data.NumberOfLines,
-                    Path = x.Data.Path,
-                    Usr = x.Data.Usr,
-                    VersionNUmber = x.Data.VersionNumber,
-                    Methods = (await _methodRepository.GetAllAsync(result.Id, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new MethodDetailDto
+                    Code = x.Code,
+                    Kind = x.Kind,
+                    Name = x.Name,
+                    Modifier = x.Modifier,
+                    NumberOfLines = x.NumberOfLines,
+                    Path = x.Path,
+                    Usr = x.Usr,
+                    VersionNUmber = x.VersionNumber,
+                    AddedOn = x.AddedOn,
+                    Methods = x.Methods.Select(y => new MethodDetailDto
                     {
                         Id = y.Id,
-                        Code = y.Data.Code,
-                        Kind = y.Data.Kind,
-                        Name = y.Data.Name,
-                        CyclomaticComplexity = y.Data.CyclomaticComplexity,
-                        EndLine = y.Data.EndLine,
-                        IsConstructor = y.Data.IsConstructor,
-                        IsGetter = y.Data.IsGetter,
-                        IsSetter = y.Data.IsSetter,
-                        MaxNestingDepth = y.Data.MaxNestingDepth,
-                        NumberOfAccessedVariables = y.Data.NumberOfAccessedVariables,
-                        NumberOfCalledMethods = y.Data.NumberOfCalledMethods,
-                        NumberOfCallers = y.Data.NumberOfCallers,
-                        NumberOfInstructors = y.Data.NumberOfInstructors,
-                        StartLine = y.Data.StartLine,
-                        Type = y.Data.Type,
-                        Usr = y.Data.Usr,
-                        VersionNumber = y.Data.VersionNumber,
+                        Code = y.Code,
+                        Kind = y.Kind,
+                        Name = y.Name,
+                        CyclomaticComplexity = y.CyclomaticComplexity,
+                        EndLine = y.EndLine,
+                        IsConstructor = y.IsConstructor,
+                        IsGetter = y.IsGetter,
+                        IsSetter = y.IsSetter,
+                        MaxNestingDepth = y.MaxNestingDepth,
+                        NumberOfAccessedVariables = y.NumberOfAccessedVariables,
+                        NumberOfCalledMethods = y.NumberOfCalledMethods,
+                        NumberOfCallers = y.NumberOfCallers,
+                        NumberOfInstructors = y.NumberOfInstructors,
+                        StartLine = y.StartLine,
+                        Type = y.Type,
+                        Usr = y.Usr,
+                        VersionNumber = y.VersionNumber,
+                        AddedOn = y.AddedOn,
+                        Calls = y.Calls,
+                        Uses = y.Uses,
+                        Modifier = y.Modifier
                     }),
-                    MethodsCalls = (await _methodRepository.GetAllRelationshipsAsync(result.Id, x.Id, "method.start_line <> 0 and method.end_line <> 0")).Select(y => new RelationshipDto
-                    {
-                        Type = y.Data.Type,
-                        Start = y.Data.Start,
-                        End = y.Data.End
-                    }),
-                    Variables = (await _variableRepository.GetAllAsync(result.Id, x.Id)).Select(y => new VariableDetailDto
+                    Variables = x.Variables.Select(y => new VariableDetailDto
                     {
                         Id = y.Id,
-                        Code = y.Data.Code,
-                        Kind = y.Data.Kind,
-                        Name = y.Data.Name,
-                        EndLine = y.Data.EndLine,
-                        StartLine = y.Data.StartLine,
-                        Type = y.Data.Type,
-                        Usr = y.Data.Usr,
-                        VersionNumber = y.Data.VersionNumber
-                    })
-                }))
+                        Code = y.Code,
+                        Kind = y.Kind,
+                        Name = y.Name,
+                        EndLine = y.EndLine,
+                        StartLine = y.StartLine,
+                        Type = y.Type,
+                        Usr = y.Usr,
+                        VersionNumber = y.VersionNumber,
+                        AddedOn = y.AddedOn,
+                    }),
+                })
             };
         }
     }

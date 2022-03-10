@@ -6,7 +6,7 @@ namespace JitEvolution.Api.Dtos.Analyzer
     public class MethodDetailDto
     {
         [DataMember]
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         [DataMember]
         public string Code { get; set; }
@@ -16,6 +16,9 @@ namespace JitEvolution.Api.Dtos.Analyzer
 
         [DataMember]
         public int EndLine { get; set; }
+
+        [DataMember]
+        public string Modifier { get; set; }
 
         [DataMember]
         public bool IsConstructor { get; set; }
@@ -58,5 +61,14 @@ namespace JitEvolution.Api.Dtos.Analyzer
 
         [DataMember]
         public int VersionNumber { get; set; }
+
+        [DataMember]
+        public int AddedOn { get; set; }
+
+        [DataMember]
+        public IEnumerable<string> Calls { get; set; }
+
+        [DataMember]
+        public IEnumerable<string> Uses { get; set; }
     }
 }

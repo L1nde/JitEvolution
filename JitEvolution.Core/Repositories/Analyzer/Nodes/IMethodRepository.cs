@@ -11,5 +11,10 @@ namespace JitEvolution.Core.Repositories.Analyzer.Nodes
         Task<Result<Method>?> GetByUsrAsync(string projectId, string usr);
 
         Task<Result<Method>?> GetAsync(long id);
+
+        Task<Result<Method>?> GetRelatedMethodAsync(long id, string version);
+
+        Task<IEnumerable<(string ClassUsr, Result<Method> Method)>> GetAllWithClassUsrForAsync(string appKey, string version);
+        Task<IEnumerable<(string ClassUsr, Result<Method> Method)>> GetAllLatestWithClassUsrAsync(string appKey, string exludeVersion);
     }
 }

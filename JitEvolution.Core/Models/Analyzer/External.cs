@@ -6,5 +6,8 @@ namespace JitEvolution.Core.Models.Analyzer
     {
         [JsonProperty("usr")]
         public string Usr { get; set; }
+
+        [JsonProperty("version")]
+        public string Version { get; set; }
     }
 }

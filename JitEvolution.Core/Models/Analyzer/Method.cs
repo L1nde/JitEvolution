@@ -58,6 +58,21 @@ namespace JitEvolution.Core.Models.Analyzer
         [JsonProperty("version_number")]
         public int VersionNumber { get; set; }
 
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
+        [JsonProperty("added_on")]
+        public int AddedOn { get; set; }
+
+        [JsonProperty("modifier")]
+        public string Modifier { get; set; }
+
+        [JsonProperty("calls")]
+        public string[] Calls { get; set; }
+
+        [JsonProperty("uses")]
+        public string[] Uses { get; set; }
+
         public override bool Equals(object? obj)
         {
             return Equals(obj as Method);
@@ -68,7 +83,6 @@ namespace JitEvolution.Core.Models.Analyzer
             return other != null &&
                    Code == other.Code &&
                    CyclomaticComplexity == other.CyclomaticComplexity &&
-                   EndLine == other.EndLine &&
                    IsConstructor == other.IsConstructor &&
                    IsSetter == other.IsSetter &&
                    IsGetter == other.IsGetter &&
@@ -79,7 +93,6 @@ namespace JitEvolution.Core.Models.Analyzer
                    NumberOfCalledMethods == other.NumberOfCalledMethods &&
                    NumberOfCallers == other.NumberOfCallers &&
                    NumberOfInstructors == other.NumberOfInstructors &&
-                   StartLine == other.StartLine &&
                    Type == other.Type &&
                    Usr == other.Usr &&
                    VersionNumber == other.VersionNumber;
@@ -90,7 +103,6 @@ namespace JitEvolution.Core.Models.Analyzer
             HashCode hash = new HashCode();
             hash.Add(Code);
             hash.Add(CyclomaticComplexity);
-            hash.Add(EndLine);
             hash.Add(IsConstructor);
             hash.Add(IsSetter);
             hash.Add(IsGetter);
@@ -101,7 +113,6 @@ namespace JitEvolution.Core.Models.Analyzer
             hash.Add(NumberOfCalledMethods);
             hash.Add(NumberOfCallers);
             hash.Add(NumberOfInstructors);
-            hash.Add(StartLine);
             hash.Add(Type);
             hash.Add(Usr);
             hash.Add(VersionNumber);

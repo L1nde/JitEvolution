@@ -1,9 +1,11 @@
 ﻿using JitEvolution.Api.Dtos.IDE;
+using JitEvolution.Core.Services.IDE;
+using JitEvolution.Notifications;
 using JitEvolution.Services.Identity;
-using JitEvolution.SignalR.Hubs;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
+using System.Net.Mime;
 
 namespace JitEvolution.Api.Controllers.IDE
 {
@@ -11,17 +13,37 @@ namespace JitEvolution.Api.Controllers.IDE
     [Authorize(AuthenticationSchemes = ApiKeyAuthenticationSchemeOptions.DefaultScheme)]
     public class FileSavedController : BaseController
     {
-        private IHubContext<JitEvolutionHub> _hubContext;
+        private readonly IProjectService _projectService;
+        private readonly IMediator _mediator;
 
-        public FileSavedController(IHubContext<JitEvolutionHub> hubContext)
+        public FileSavedController(IProjectService projectService, IMediator mediator)
         {
-            _hubContext = hubContext;
+            _projectService = projectService;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> FileSaved([FromBody] FileSavedDto dto)
+        public async Task<IActionResult> FileSaved([FromForm] FileSavedDto dto)
         {
+            ValidateZipFile(dto.ProjectZip);
+
+            await _projectService.CreateOrUpdateAsync(dto.ProjectId, dto.ProjectZip);
+
+            await _mediator.Publish(new ProjectUpdated());
+
             return Ok();
+        }
+
+        private void ValidateZipFile(IFormFile file)
+        {
+            if (file.ContentType != MediaTypeNames.Application.Zip && file.ContentType != "application/x-zip-compressed")
+            {
+                throw new Exception("Invalid content-type");
+            }
+            if (string.IsNullOrWhiteSpace(file.FileName))
+            {
+                throw new Exception("Invalid file name");
+            }
         }
     }
 }

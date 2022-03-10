@@ -13,8 +13,12 @@ namespace JitEvolution.Core.Repositories.Analyzer.Nodes
 
         Task<IEnumerable<Result<TEntity>>> GetAllLatestAsync(string appKey, string exludeVersion);
 
+        Task<Result<TEntity>?> GetByIdAndIncomingAsync(long id, string relationshipType);
+
         Task AddRelationshipAsync(string fromId, string toId, string type);
         Task AddRelationshipAsync(long fromId, long toId, string type);
+
+        Task UpdateAddedOnFor(string version, int addedOn);
 
         Task DeleteWithRelationshipAsync(long id);
 

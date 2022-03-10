@@ -4,6 +4,6 @@ namespace JitEvolution.Core.Services.IDE
 {
     public interface IProjectService
     {
-        Task CreateAsync(string projectId, IFormFile projectZipFile);
+        Task CreateOrUpdateAsync(string projectId, IFormFile projectZipFile);
     }
 }

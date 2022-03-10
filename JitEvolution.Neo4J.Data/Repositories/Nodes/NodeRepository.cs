@@ -16,45 +16,6 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
 
         public async Task<Result<TEntity>> MergeAsync(long id, IDictionary<string, object> properties, string version)
         {
-            //properties.Add("id", id);
-            //var propertiesString = "{ " + string.Join(", ", properties.Select(x => x.Key + $": '{x.Value}'")) + " }";
-
-            //var client = await ClientAsync();
-
-            //var filter = properties.ContainsKey("usr")
-            //    ? $"{{usr: '{properties["usr"]}', appKey: '{properties["appKey"]}'}}"
-            //    : $"{{appKey: '{properties["appKey"]}'}}";
-
-            //var models = await client.Cypher.Merge($"(n:{Label}{{id: '{id}'}})")
-            //    .OnCreate().Set($"n = {propertiesString}")
-            //    .OnMatch().Set($"n = {propertiesString}")
-            //    .Return(n => new { Id = n.Id(), Data = n.As<TEntity>() })
-            //    .ResultsAsync;
-
-            //var model = models.Select(x => new Result<TEntity>(x.Id, x.Data)).FirstOrDefault();
-
-            //var existings = await client.Cypher.Match($"(n:{Label}{filter})")
-            //    .Where($"not(n)-[:CHANGED_TO]->(:{Label})")
-            //    .AndWhere($"id(n) <> {model.Id}")
-            //    .Return(n => new { Id = n.Id(), Data = n.As<TEntity>() })
-            //    .ResultsAsync;
-
-            //var existing = existings.Select(x => new Result<TEntity>(x.Id, x.Data)).FirstOrDefault();
-
-            //if (existing != null)
-            //{
-            //    await client.Cypher
-            //        .Match($"(n:{Label})")
-            //        .Where($"id(n) = {existing.Id}")
-            //        .Match($"(n2:{Label})")
-            //        .Where($"id(n2) = {model.Id}")
-            //        .Merge("(n)-[r:CHANGED_TO]->(n2)")
-            //        .Return(r => r.Id())
-            //        .ResultsAsync;
-            //}
-
-            //return model;
-
             properties.Add("id", id);
             properties.Add("version", version);
             var propertiesString = "{ " + string.Join(", ", properties.Select(x => x.Key + $": '{x.Value}'")) + " }";
@@ -80,6 +41,16 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
         public Task<IEnumerable<Result<TEntity>>> GetAllLatestAsync(string appKey, string exludeVersion)
         {
             return GetAllAsync(appKey, $"not(n)-[:CHANGED_TO]->(:{Label}) AND n.version <> '{exludeVersion}'");
+        }
+
+        public async Task UpdateAddedOnFor(string version, int addedOn)
+        {
+            var client = await ClientAsync();
+
+            await client.Cypher.Match($"(a)")
+                .Where($"a.version = '{version}'")
+                .Set($"a.added_on = {addedOn}")
+                .ExecuteWithoutResultsAsync();
         }
 
         public async Task AddRelationshipAsync(string fromId, string toId, string type)
@@ -141,19 +112,31 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
             return models.Select(x => new Result<TEntity>(x.Id, x.Data));
         }
 
+        public async Task<Result<TEntity>?> GetByIdAndIncomingAsync(long id, string relationshipType)
+        {
+            var client = await ClientAsync();
+
+            var models = await client.Cypher.Match($"(n:{Label})<-[r:{relationshipType}]-()")
+                .Where($"id(n) = {id}")
+                .Return(n => new { Id = n.Id(), Data = n.As<TEntity>() })
+                .ResultsAsync;
+
+            return models.Select(x => new Result<TEntity>(x.Id, x.Data)).FirstOrDefault();
+        }
+
         public async Task<IEnumerable<Result<Core.Models.Analyzer.Relationship>>> GetIncomingRelationshipsAsync(long id)
         {
             var client = await ClientAsync();
 
-            var models = await client.Cypher.Match($"(n:{Label})<-[r]-()")
-                .Where($"id(n) = {id}")
-                .Return(r => new { Id = r.Id(), Start = Return.As<long>("ID(startNode(r))"), End = Return.As<long>("ID(endNode(r))"), Type = r.Type() })
+            var models = await client.Cypher.Match($"(e:{Label})<-[r]-(s)")
+                .Where($"id(e) = {id}")
+                .Return(r => new { Id = r.Id(), Start = Return.As<long>("id(s)"), StartLabel = Return.As<string>("last(labels(s))"), End = Return.As<long>("ID(e)"), EndLabel = Return.As<string>("last(labels(e))"), Type = r.Type() })
                 .ResultsAsync;
 
             return models.Select(x => new Result<Core.Models.Analyzer.Relationship>(x.Id, new Core.Models.Analyzer.Relationship
             {
-                Start = x.Start,
-                End = x.End,
+                Start = (x.Start, Enum.Parse<NodeLabelEnum>(x.StartLabel)),
+                End = (x.End, Enum.Parse<NodeLabelEnum>(x.EndLabel)),
                 Type = x.Type
             }));
         }
@@ -162,15 +145,15 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
         {
             var client = await ClientAsync();
 
-            var models = await client.Cypher.Match($"(n:{Label})-[r]->()")
-                .Where($"id(n) = {id}")
-                .Return(r => new { Id = r.Id(), Start = Return.As<long>("ID(startNode(r))"), End = Return.As<long>("ID(endNode(r))"), Type = r.Type() })
+            var models = await client.Cypher.Match($"(s:{Label})-[r]->(e)")
+                .Where($"id(s) = {id}")
+                .Return(r => new { Id = r.Id(), Start = Return.As<long>("id(s)"), StartLabel = Return.As<string>("last(labels(s))"), End = Return.As<long>("ID(e)"), EndLabel = Return.As<string>("last(labels(e))"), Type = r.Type() })
                 .ResultsAsync;
 
             return models.Select(x => new Result<Core.Models.Analyzer.Relationship>(x.Id, new Core.Models.Analyzer.Relationship
             {
-                Start = x.Start,
-                End = x.End,
+                Start = (x.Start, Enum.Parse<NodeLabelEnum>(x.StartLabel)),
+                End = (x.End, Enum.Parse<NodeLabelEnum>(x.EndLabel)),
                 Type = x.Type
             }));
         }

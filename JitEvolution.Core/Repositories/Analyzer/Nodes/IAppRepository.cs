@@ -8,6 +8,12 @@ namespace JitEvolution.Core.Repositories.Analyzer.Nodes
 
         Task<Result<App>?> GetByAppKeyAsync(string projectId);
 
+        Task<IEnumerable<App>> GetResultAsync(string projectId, int? versionNumber);
+
         Task<Result<App>?> GetAsync(long id);
+
+        Task<IEnumerable<Relationship>> GetRelationshipsAsync(string projectId);
+
+        Task<IEnumerable<int>> GetAppVersionNumbersAsync(string projectId);
     }
 }

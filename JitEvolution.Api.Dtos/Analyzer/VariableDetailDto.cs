@@ -6,7 +6,7 @@ namespace JitEvolution.Api.Dtos.Analyzer
     public class VariableDetailDto
     {
         [DataMember]
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         [DataMember]
         public string Code { get; set; }
@@ -31,5 +31,8 @@ namespace JitEvolution.Api.Dtos.Analyzer
 
         [DataMember]
         public int VersionNumber { get; set; }
+
+        [DataMember]
+        public int AddedOn { get; set; }
     }
 }

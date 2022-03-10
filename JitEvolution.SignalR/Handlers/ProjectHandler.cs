@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace JitEvolution.SignalR.Handlers
 {
-    public class ProjectHandler : INotificationHandler<ProjectAdded>
+    public class ProjectHandler : INotificationHandler<ProjectAdded>, INotificationHandler<ProjectUpdated>
     {
         private IHubContext<JitEvolutionHub> _hubContext;
 
@@ -18,6 +18,11 @@ namespace JitEvolution.SignalR.Handlers
         public Task Handle(ProjectAdded notification, CancellationToken cancellationToken)
         {
             return _hubContext.Clients.All.SendAsync(SignalRConstants.ProjectAdded);
+        }
+
+        public Task Handle(ProjectUpdated notification, CancellationToken cancellationToken)
+        {
+            return _hubContext.Clients.All.SendAsync(SignalRConstants.ProjectUpdated);
         }
     }
 }

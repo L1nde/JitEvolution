@@ -22,7 +22,7 @@ namespace JitEvolution.Services.IDE
             _config = config.Value;
         }
 
-        public async Task CreateAsync(string projectId, IFormFile projectZipFile)
+        public async Task CreateOrUpdateAsync(string projectId, IFormFile projectZipFile)
         {
             using var extractedPath = new UseTemporaryFile(_config.GraphifyEvolution.SourcesDirectoryPath);
             using var zipPath = new UseTemporaryFile();
@@ -34,7 +34,7 @@ namespace JitEvolution.Services.IDE
             ZipFile.ExtractToDirectory(zipPath.TemporaryPath, extractedPath.TemporaryPath, true);
 
             // This is probably dangerous. Need to sanitize arguments
-            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source/{extractedPath.FileName} --language java --app-key \"{projectId}\"")
+            var processinfo = new ProcessStartInfo("docker", $"run --rm -v {_config.GraphifyEvolution.DockerVolumeName}:/source {_config.GraphifyEvolution.DockerImageName} analyse /source/{extractedPath.FileName} --language java --app-key \"{projectId}\" --neo4j-host host.docker.internal --neo4j-port 5259 --neo4j-username neo4j --neo4j-password 1234")
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -56,7 +56,7 @@ namespace JitEvolution.Services.IDE
                 throw new Exception("Failed to start analyzer");
             }
 
-            if (process.ExitCode == 0)
+            if (process.ExitCode == 0 && !_projectRepository.Queryable.Any(x => x.ProjectId == projectId))
             {
                 await _projectRepository.AddAsync(new Core.Models.IDE.Project
                 {
