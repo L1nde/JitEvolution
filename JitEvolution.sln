@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitEvolution.Neo4J.Data", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitEvolution.SignalR", "JitEvolution.SignalR\JitEvolution.SignalR.csproj", "{4663A960-4680-4906-A8FF-60E7D074D0B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitEvolution.Notifications", "JitEvolution.Notifications\JitEvolution.Notifications.csproj", "{1ECBB9B5-9825-4BC7-BEA5-2D53D13ECDF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitEvolution.Notifications", "JitEvolution.Notifications\JitEvolution.Notifications.csproj", "{1ECBB9B5-9825-4BC7-BEA5-2D53D13ECDF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitEvolution.Hangfire", "JitEvolution.Hangfire\JitEvolution.Hangfire.csproj", "{0CCD489F-A55D-463A-AA55-E2BF99D5F121}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{1ECBB9B5-9825-4BC7-BEA5-2D53D13ECDF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ECBB9B5-9825-4BC7-BEA5-2D53D13ECDF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ECBB9B5-9825-4BC7-BEA5-2D53D13ECDF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CCD489F-A55D-463A-AA55-E2BF99D5F121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CCD489F-A55D-463A-AA55-E2BF99D5F121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CCD489F-A55D-463A-AA55-E2BF99D5F121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CCD489F-A55D-463A-AA55-E2BF99D5F121}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

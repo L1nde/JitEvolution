@@ -27,6 +27,7 @@
     <ProjectReference Include="..\JitEvolution.Core\JitEvolution.Core.csproj" />
     <ProjectReference Include="..\JitEvolution.Data\JitEvolution.Data.csproj" />
     <ProjectReference Include="..\JitEvolution.Exceptions\JitEvolution.Exceptions.csproj" />
+    <ProjectReference Include="..\JitEvolution.Hangfire\JitEvolution.Hangfire.csproj" />
     <ProjectReference Include="..\JitEvolution.Neo4J.Data\JitEvolution.Neo4J.Data.csproj" />
     <ProjectReference Include="..\JitEvolution.Notifications\JitEvolution.Notifications.csproj" />
     <ProjectReference Include="..\JitEvolution.Services\JitEvolution.Services.csproj" />

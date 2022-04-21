@@ -2,6 +2,7 @@ using JitEvolution.Api.Middlewares;
 using JitEvolution.BusinessObjects;
 using JitEvolution.Config;
 using JitEvolution.Data;
+using JitEvolution.Hangfire;
 using JitEvolution.Neo4J.Data;
 using JitEvolution.Notifications;
 using JitEvolution.Services;
@@ -23,6 +24,7 @@ builder.Services.RegisterIdentity();
 builder.Services.RegisterBusinessObjects();
 builder.Services.RegisterServices();
 builder.Services.RegisterNeo4JServices();
+builder.Services.RegisterHangfire(builder.Configuration);
 
 builder.Services.AddMediatR(
     Assembly.GetExecutingAssembly(),
@@ -83,6 +85,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseHangfire();
 
 app.UseRouting();
 
