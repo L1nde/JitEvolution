@@ -17,31 +17,20 @@ namespace JitEvolution.Api.Controllers.IDE
     public class ProjectController : BaseController
     {
         private readonly IProjectService _projectService;
-        private readonly IProjectRepository _projectRepository;
-        private readonly IMediator _mediator;
-        private readonly CurrentUser currentUser;
 
         public ProjectController(IProjectService projectService, IMediator mediator, IProjectRepository projectRepository, CurrentUser currentUser)
         {
             _projectService = projectService;
-            _mediator = mediator;
-            _projectRepository = projectRepository;
-            this.currentUser = currentUser;
         }
 
         [HttpPost]
-        public async Task Create([FromForm] CreateProjectDto dto)
+        public async Task<IActionResult> Create([FromForm] CreateProjectDto dto)
         {
-            if (await _projectRepository.Queryable.AnyAsync(x => x.ProjectId == dto.ProjectId && x.UserId == currentUser.Id))
-            {
-                //throw new Exception($"User already has project with id \"{dto.ProjectId}\"");
-            }
-
             ValidateZipFile(dto.ProjectZip);
             
             await _projectService.CreateOrUpdateAsync(dto.ProjectId, dto.ProjectZip);
 
-            await _mediator.Publish(new ProjectAdded());
+            return Ok();
         }
 
         private void ValidateZipFile(IFormFile file)

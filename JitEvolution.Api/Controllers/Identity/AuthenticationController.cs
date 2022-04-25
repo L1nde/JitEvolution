@@ -26,6 +26,7 @@ namespace JitEvolution.Api.Controllers.Identity
                 {
                     Id = user.Id,
                     Username = user.UserName,
+                    AccessKey = user.AccessKey
                 },
                 Token = token
             };

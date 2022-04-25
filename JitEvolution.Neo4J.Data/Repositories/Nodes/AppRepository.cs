@@ -48,12 +48,18 @@ namespace JitEvolution.Neo4J.Data.Repositories.Nodes
 
             if(!versionNumber.HasValue)
             {
-                versionNumber = (await GetAppVersionNumbersAsync(projectId)).OrderByDescending(x => x).First();
+                versionNumber = (await GetAppVersionNumbersAsync(projectId)).OrderByDescending(x => x).FirstOrDefault();
+
+                if (versionNumber == null)
+                {
+                    return Enumerable.Empty<App>();
+                }
             }
 
             var models = await client.Cypher
-                .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)-[:CLASS_OWNS_METHOD]->(method:Method)", "(class1)-[CLASS_OWNS_VARIABLE]->(variable:Variable)")
+                .Match("(app:App)-[:APP_OWNS_CLASS]->(class1:Class)-[:CLASS_OWNS_METHOD]->(method:Method)")
                 .Where($"app.appKey = '{projectId}'")
+                .OptionalMatch("(class1)-[CLASS_OWNS_VARIABLE]->(variable:Variable)")
                 .OptionalMatch("appPath=(app)<-[:CHANGED_TO*]-(:App)")
                 .OptionalMatch("classPath=(class1)<-[:CHANGED_TO*]-(:Class)")
                 .OptionalMatch("methodPath=(method)<-[:CHANGED_TO*]-(:Method)")

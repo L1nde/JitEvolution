@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace JitEvolution.SignalR.Handlers
 {
-    public class ProjectHandler : INotificationHandler<ProjectAdded>, INotificationHandler<ProjectUpdated>
+    public class ProjectHandler : 
+        INotificationHandler<ProjectAdded>,
+        INotificationHandler<ProjectUpdated>,
+        INotificationHandler<ProjectUpdating>,
+        INotificationHandler<FileOpened>
     {
         private IHubContext<JitEvolutionHub> _hubContext;
 
@@ -17,12 +21,22 @@ namespace JitEvolution.SignalR.Handlers
 
         public Task Handle(ProjectAdded notification, CancellationToken cancellationToken)
         {
-            return _hubContext.Clients.All.SendAsync(SignalRConstants.ProjectAdded);
+            return _hubContext.Clients.User(notification.UserId.ToString()).SendAsync(SignalRConstants.ProjectAdded);
         }
 
         public Task Handle(ProjectUpdated notification, CancellationToken cancellationToken)
         {
-            return _hubContext.Clients.All.SendAsync(SignalRConstants.ProjectUpdated);
+            return _hubContext.Clients.User(notification.UserId.ToString()).SendAsync(SignalRConstants.ProjectUpdated, notification.ProjectId);
+        }
+
+        public Task Handle(ProjectUpdating notification, CancellationToken cancellationToken)
+        {
+            return _hubContext.Clients.User(notification.UserId.ToString()).SendAsync(SignalRConstants.ProjectUpdating, notification.ProjectId);
+        }
+
+        public Task Handle(FileOpened notification, CancellationToken cancellationToken)
+        {
+            return _hubContext.Clients.User(notification.UserId.ToString()).SendAsync(SignalRConstants.FileOpened, notification.ProjectId, notification.FileUri);
         }
     }
 }

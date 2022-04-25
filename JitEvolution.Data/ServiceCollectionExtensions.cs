@@ -1,9 +1,11 @@
 ﻿using JitEvolution.Core.Models.Identity;
 using JitEvolution.Core.Repositories.IDE;
 using JitEvolution.Core.Repositories.Identity;
+using JitEvolution.Core.Repositories.Queue;
 using JitEvolution.Data.Repositories;
 using JitEvolution.Data.Repositories.IDE;
 using JitEvolution.Data.Repositories.Identity;
+using JitEvolution.Data.Repositories.Queue;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +36,7 @@ namespace JitEvolution.Data
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IQueueItemRepository, QueueItemRepository>();
 
             return services;
         }

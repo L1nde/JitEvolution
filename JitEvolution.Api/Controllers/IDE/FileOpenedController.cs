@@ -1,10 +1,10 @@
 ﻿using JitEvolution.Api.Dtos.IDE;
+using JitEvolution.Notifications;
 using JitEvolution.Services.Identity;
-using JitEvolution.SignalR.Constants;
-using JitEvolution.SignalR.Hubs;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace JitEvolution.Api.Controllers.IDE
 {
@@ -12,17 +12,18 @@ namespace JitEvolution.Api.Controllers.IDE
     [Authorize(AuthenticationSchemes = ApiKeyAuthenticationSchemeOptions.DefaultScheme)]
     public class FileOpenedController : BaseController
     {
-        private IHubContext<JitEvolutionHub> _hubContext;
+        private readonly IMediator _mediator;
 
-        public FileOpenedController(IHubContext<JitEvolutionHub> hubContext)
+        public FileOpenedController(IMediator mediator)
         {
-            _hubContext = hubContext;
+            _mediator = mediator;
         }
 
         [HttpPost]
         public async Task<IActionResult> FileOpened([FromBody] FileOpenedDto dto)
         {
-            await _hubContext.Clients.All.SendAsync(SignalRConstants.FileOpened, dto.ProjectId, dto.FileUri);
+
+            await _mediator.Publish(new FileOpened(Guid.Parse(User.Claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value), dto.ProjectId, dto.FileUri));
 
             return Ok();
         }

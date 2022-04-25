@@ -10,6 +10,10 @@ namespace JitEvolution.Core.Repositories
 
         Task<TEntity> AddAsync(TEntity user);
 
+        TEntity Remove(TEntity entity);
+
         Task SaveChangesAsync();
+
+        Task SaveChangesAsync(CancellationToken ct);
     }
 }

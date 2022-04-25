@@ -45,7 +45,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
                 Name = app.Name,
                 VersionNumber = app.VersionNumber,
                 AddedOn = app.AddedOn,
-                Classes = app.Classes.Select(x => new ClassDetailDto
+                Classes = app.Classes.OrderBy(x => x.Name).Select(x => new ClassDetailDto
                 {
                     Id = x.Id,
                     Code = x.Code,
@@ -57,7 +57,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
                     Usr = x.Usr,
                     VersionNUmber = x.VersionNumber,
                     AddedOn = x.AddedOn,
-                    Methods = x.Methods.Select(y => new MethodDetailDto
+                    Methods = x.Methods.OrderBy(x => x.Kind).ThenBy(x => x.Name).Select(y => new MethodDetailDto
                     {
                         Id = y.Id,
                         Code = y.Code,
@@ -82,7 +82,7 @@ namespace JitEvolution.Api.Controllers.Analyzer
                         Uses = y.Uses,
                         Modifier = y.Modifier
                     }),
-                    Variables = x.Variables.Select(y => new VariableDetailDto
+                    Variables = x.Variables.OrderBy(x => x.Name).Select(y => new VariableDetailDto
                     {
                         Id = y.Id,
                         Code = y.Code,

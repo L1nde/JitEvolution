@@ -2,9 +2,9 @@
 
 namespace JitEvolution.Notifications
 {
-    public class ProjectUpdated : INotification
+    public class ProjectUpdating : INotification
     {
-        public ProjectUpdated(Guid userId, string projectId)
+        public ProjectUpdating(Guid userId, string projectId)
         {
             UserId = userId;
             ProjectId = projectId;

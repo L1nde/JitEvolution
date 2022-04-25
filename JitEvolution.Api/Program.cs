@@ -30,6 +30,7 @@ builder.Services.AddMediatR(
     Assembly.GetExecutingAssembly(),
     Assembly.GetAssembly(typeof(JitEvolutionHub)),
     Assembly.GetAssembly(typeof(JitEvolution.Services.ServiceCollectionExtensions)),
+    Assembly.GetAssembly(typeof(JitEvolution.Hangfire.ServiceCollectionExtensions)),
     Assembly.GetAssembly(typeof(ProjectAdded)));
 
 builder.Services.AddOptions();

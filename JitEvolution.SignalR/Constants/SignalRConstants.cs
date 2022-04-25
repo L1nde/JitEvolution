@@ -6,5 +6,6 @@
         public const string FileOpened = "FileOpened";
         public const string ProjectAdded = "ProjectAdded";
         public const string ProjectUpdated = "ProjectUpdated";
+        public const string ProjectUpdating = "ProjectUpdating";
     }
 }

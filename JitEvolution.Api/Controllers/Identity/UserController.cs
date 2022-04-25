@@ -34,7 +34,8 @@ namespace JitEvolution.Api.Controllers.Identity
                 return new UserDto
                 {
                     Id = user.Id,
-                    Username = user.UserName
+                    Username = user.UserName,
+                    AccessKey = user.AccessKey
                 };
             }
         }

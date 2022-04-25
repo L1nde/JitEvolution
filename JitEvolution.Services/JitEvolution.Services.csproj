@@ -20,6 +20,7 @@
     <ProjectReference Include="..\JitEvolution.Config\JitEvolution.Config.csproj" />
     <ProjectReference Include="..\JitEvolution.Core\JitEvolution.Core.csproj" />
     <ProjectReference Include="..\JitEvolution.Exceptions\JitEvolution.Exceptions.csproj" />
+    <ProjectReference Include="..\JitEvolution.Notifications\JitEvolution.Notifications.csproj" />
   </ItemGroup>
 
 </Project>

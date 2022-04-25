@@ -29,8 +29,6 @@ namespace JitEvolution.Api.Controllers.IDE
 
             await _projectService.CreateOrUpdateAsync(dto.ProjectId, dto.ProjectZip);
 
-            await _mediator.Publish(new ProjectUpdated());
-
             return Ok();
         }
 

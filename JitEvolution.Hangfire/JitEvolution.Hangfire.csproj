@@ -14,12 +14,16 @@
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
     <PackageReference Include="Hangfire.Core" Version="1.7.28" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.9.7" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JitEvolution.BusinessObjects\JitEvolution.BusinessObjects.csproj" />
     <ProjectReference Include="..\JitEvolution.Core\JitEvolution.Core.csproj" />
+    <ProjectReference Include="..\JitEvolution.Data\JitEvolution.Data.csproj" />
+    <ProjectReference Include="..\JitEvolution.Notifications\JitEvolution.Notifications.csproj" />
   </ItemGroup>
 
 </Project>

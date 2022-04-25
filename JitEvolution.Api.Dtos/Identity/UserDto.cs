@@ -13,5 +13,8 @@ namespace JitEvolution.Api.Dtos.Identity
         [DataMember]
         [JsonRequired]
         public string Username { get; set; }
+
+        [DataMember]
+        public string AccessKey { get; set; }
     }
 }

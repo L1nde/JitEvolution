@@ -25,9 +25,21 @@ namespace JitEvolution.Data.Repositories
             return entity;
         }
 
+        public virtual TEntity Remove(TEntity entity)
+        {
+            DbContext.Remove(entity);
+
+            return entity;
+        }
+
+        public virtual Task SaveChangesAsync(CancellationToken ct)
+        {
+            return DbContext.SaveChangesAsync(ct);
+        }
+
         public virtual Task SaveChangesAsync()
         {
-            return DbContext.SaveChangesAsync();
+            return SaveChangesAsync(CancellationToken.None);
         }
     }
 }
