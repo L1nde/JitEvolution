@@ -60,6 +60,8 @@ namespace JitEvolution.Services.IDE
 
             await _queueItemRepository.SaveChangesAsync();
 
+            await _mediator.Publish(new QueueItemAdded(project.UserId));
+
             await _mediator.Publish(new AnalyzeProject(project.Id));
         }
     }

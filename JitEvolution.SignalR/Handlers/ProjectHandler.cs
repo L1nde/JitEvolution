@@ -10,7 +10,8 @@ namespace JitEvolution.SignalR.Handlers
         INotificationHandler<ProjectAdded>,
         INotificationHandler<ProjectUpdated>,
         INotificationHandler<ProjectUpdating>,
-        INotificationHandler<FileOpened>
+        INotificationHandler<FileOpened>,
+        INotificationHandler<QueueItemAdded>
     {
         private IHubContext<JitEvolutionHub> _hubContext;
 
@@ -37,6 +38,11 @@ namespace JitEvolution.SignalR.Handlers
         public Task Handle(FileOpened notification, CancellationToken cancellationToken)
         {
             return _hubContext.Clients.User(notification.UserId.ToString()).SendAsync(SignalRConstants.FileOpened, notification.ProjectId, notification.FileUri);
+        }
+
+        public Task Handle(QueueItemAdded notification, CancellationToken cancellationToken)
+        {
+            return _hubContext.Clients.User(notification.UserId.ToString()).SendAsync(SignalRConstants.QueueItemAdded);
         }
     }
 }

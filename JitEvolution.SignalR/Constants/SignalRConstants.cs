@@ -7,5 +7,6 @@
         public const string ProjectAdded = "ProjectAdded";
         public const string ProjectUpdated = "ProjectUpdated";
         public const string ProjectUpdating = "ProjectUpdating";
+        public const string QueueItemAdded = "QueueItemAdded";
     }
 }
